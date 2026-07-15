@@ -195,7 +195,7 @@ sequenceDiagram
 
 <p>Two consequences follow, and they explain most surprising behaviour:</p>
 <ol>
-  <li><b>Long conversations cost more per turn</b>, because the whole transcript is re-sent each time. Turn 50 is more expensive than turn 2.</li>
+  <li><b>Long conversations cost more per turn</b>, because the whole transcript is re-sent each time. Turn 50 is more expensive than turn 2. <span class="jargon" data-term="prompt-caching">Prompt caching</span> softens the blow — the unchanged prefix is billed at roughly a tenth — but it does not make the transcript shorter.</li>
   <li><b>When the package gets too big, something must be dropped or summarised</b> — and that is when Claude "forgets."</li>
 </ol>
 
@@ -691,7 +691,7 @@ flowchart TD
 </div>
 
 <h2>What it actually does</h2>
-<p>Given a task, Claude Code reads your files, runs your commands, edits code, and checks its work — looping until done or until it needs you. It is an <span class="jargon" data-term="agent">agent</span> in the strict sense: it picks its own next step.</p>
+<p>Given a task, Claude Code reads your files, runs your commands, edits code, and checks its work — looping until done or until it needs you. Every one of those actions is <span class="jargon" data-term="tool-use">tool use</span>. Unlike a <span class="jargon" data-term="workflow">workflow</span>, nobody drew the path in advance: it is an <span class="jargon" data-term="agent">agent</span> in the strict sense, picking its own next step.</p>
 <p>That is the whole value and the whole risk, which is why <a href="#core-loop">permission modes</a> exist and why <a href="#core-loop">plan mode</a> is the habit worth building first.</p>
 
 <h2>What it is not</h2>
@@ -808,6 +808,7 @@ ${VERIFIED}
 </div>
 
 <h2>2. Permission modes decide how much rope</h2>
+<p>A <span class="jargon" data-term="permission-mode">permission mode</span> is your standing answer to "what may Claude do without asking?" There are six.</p>
 <table class="doc">
 <thead><tr><th>Mode</th><th>Claude can…</th></tr></thead>
 <tbody>
@@ -1412,6 +1413,662 @@ flowchart LR
     <li><a href="https://code.claude.com/docs/en/github-actions">GitHub Actions</a> · <a href="https://code.claude.com/docs/en/gitlab-ci-cd">GitLab CI/CD</a></li>
     <li><a href="https://code.claude.com/docs/en/authentication">Authentication</a> — claude setup-token</li>
     <li><a href="https://code.claude.com/docs/en/permissions">Permissions</a> — allowedTools syntax</li>
+  </ul>
+</div>
+`
+      }
+    ]
+  },
+
+  /* ============================ PART 3 ============================ */
+  {
+    part: "Part 3 · Desktop & Cowork",
+    pages: [
+      {
+        id: "desktop-app",
+        num: "3.1",
+        title: "The desktop app",
+        html: `
+${VERIFIED}
+<p class="lead">You are reading a Salesforce setup page and want to ask about it. Alt-tab to a browser, describe the screen in words, hope you described it right?</p>
+
+<p>Double-tap Option. The quick entry box appears over whatever you're doing, you click the window you're asking about, and a screenshot of it goes with your question. That interaction is most of why the desktop app exists.</p>
+
+<h2>Three tabs, three modes of working</h2>
+<table class="doc">
+<thead><tr><th>Tab</th><th>For</th></tr></thead>
+<tbody>
+<tr><td><b>Chat</b></td><td>What you already know from claude.ai. Same conversations, synced.</td></tr>
+<tr><td><b>Cowork</b></td><td>Delegate a whole task and walk away. <a href="#cowork">Part 3.2 →</a></td></tr>
+<tr><td><b>Code</b></td><td>Claude Code, with parallel sessions, visual diff review, and an integrated editor. <a href="#what-is-claude-code">Part 2.1 →</a></td></tr>
+</tbody>
+</table>
+
+<p>Conversations, <span class="jargon" data-term="project">projects</span>, <span class="jargon" data-term="memory">memory</span>, and preferences sync across every device you use.</p>
+
+<h2>Quick entry — the reason to install it</h2>
+<p><b>Double-tap Option</b> on a Mac opens a small input over your current app. Rebind it to Option+Space or anything else. Two things make it more than a shortcut:</p>
+<ul>
+  <li><b>Click a window to attach it.</b> A screenshot of that app goes with your message — no describing, no cropping.</li>
+  <li><b>Caps Lock dictates</b>, with live transcription.</li>
+</ul>
+
+<h2>Desktop extensions (.mcpb)</h2>
+<p>An <span class="jargon" data-term="mcpb">.mcpb file</span> is a local <span class="jargon" data-term="mcp">MCP</span> server bundled for one-click install — a zip with a manifest. The app ships its own Node runtime, so most extensions need no toolchain from you. Node, Python, and binary servers are all supported, and the format is open-sourced.</p>
+
+<div class="callout warn">
+  <div class="c-head">⚠️ Renamed: .dxt is now .mcpb</div>
+  <p>Desktop Extensions used the <code>.dxt</code> extension; they are now <b>.mcpb</b> (MCP Bundle). Existing <code>.dxt</code> files still work, but anything written today should say <code>.mcpb</code>.</p>
+</div>
+
+<div class="callout tip">
+  <div class="c-head">💡 This is where local MCP servers belong</div>
+  <p>Desktop runs MCP servers <b>on your machine</b>, as you. That is the opposite of claude.ai's custom <span class="jargon" data-term="connector">connectors</span>, which Anthropic reaches from their cloud. If a tool needs to touch your filesystem or something behind your VPN, Desktop is the surface — see <a href="#connectors-files">4.5</a>.</p>
+</div>
+
+<h2>Platforms</h2>
+<p>macOS 11+ and Windows 10+. Linux is in beta — Ubuntu 22.04+ or Debian 12+, via apt or a <code>.deb</code>.</p>
+
+<div class="callout warn">
+  <div class="c-head">⚠️ Linux beta is missing pieces</div>
+  <p>No <span class="jargon" data-term="computer-use">computer use</span> and no dictation. The quick-entry hotkey works on X11 but needs desktop support on Wayland. Cowork on Linux needs KVM hardware virtualisation, roughly 25 GB of disk, and 8 GB of RAM.</p>
+</div>
+
+<h2>Claude in Chrome</h2>
+<p>The browser extension is not a fourth tab — it is a capability the other surfaces borrow. Cowork and Claude Code both drive the browser through it. Chrome only, and beta on paid plans.</p>
+
+<div class="sources">
+  <h3>Official sources</h3>
+  <ul>
+    <li><a href="https://support.claude.com/en/articles/10065433-install-claude-desktop">Install Claude Desktop</a> — platforms, Linux beta limits</li>
+    <li><a href="https://support.claude.com/en/articles/12626668-use-quick-entry-with-claude-desktop-on-mac">Quick entry on Mac</a></li>
+    <li><a href="https://support.claude.com/en/articles/12922929-building-desktop-extensions-with-mcpb">Building desktop extensions with MCPB</a></li>
+    <li><a href="https://support.claude.com/en/articles/10949351-getting-started-with-local-mcp-servers-on-claude-desktop">Local MCP servers on Desktop</a></li>
+    <li><a href="https://support.claude.com/en/articles/12012173-get-started-with-claude-in-chrome">Claude in Chrome</a></li>
+    <li><a href="https://code.claude.com/docs/en/desktop">Claude Code in the desktop app</a></li>
+  </ul>
+</div>
+`
+      },
+
+      {
+        id: "cowork",
+        num: "3.2",
+        title: "Cowork",
+        html: `
+${VERIFIED}
+<p class="lead">"Go through this quarter's release notes folder, pull out everything customer-facing, and build me a summary deck." Then close your laptop.</p>
+
+<p>That is <span class="jargon" data-term="cowork">Cowork</span>. You describe an outcome; Claude makes a plan, breaks it into subtasks, runs them — often in parallel — and comes back with finished work. Spreadsheets with working formulas, decks, organised folders.</p>
+
+<div class="callout tip">
+  <div class="c-head">💡 What Cowork is actually for</div>
+  <p>Anthropic reports <b>over 90% of Cowork usage is not software development</b> — mostly business operations and content creation. If you are reaching for it to write code, you want <a href="#what-is-claude-code">Claude Code</a>.</p>
+</div>
+
+<h2>How a task runs</h2>
+<div class="mermaid">
+flowchart TD
+    A["You describe an outcome"] --> B["Claude plans it"]
+    B --> C["Splits into subtasks"]
+    C --> D1["Subagent"]
+    C --> D2["Subagent"]
+    C --> D3["Subagent"]
+    D1 --> E["Deliverables<br/>.xlsx · .pptx · .docx · files"]
+    D2 --> E
+    D3 --> E
+    E --> F["You review"]
+</div>
+<p class="diagram-caption">Parallel subagents, each running end to end. You see the result, not the middle.</p>
+
+<h2>Remote by default — and why that matters</h2>
+<p>Cowork runs in an isolated, temporary <span class="jargon" data-term="sandbox">sandbox</span> on Anthropic's servers. Work continues with your laptop shut, and sessions sync across devices so you can start on desktop and check from your phone.</p>
+
+<table class="doc">
+<thead><tr><th></th><th>Remote session <small>(default)</small></th><th>Local session <small>(desktop only)</small></th></tr></thead>
+<tbody>
+<tr><td>Runs where</td><td>Ephemeral sandbox on Anthropic infra</td><td>Agent loop native; code in a local VM<br><small>Apple Virtualization.framework / Hyper-V</small></td></tr>
+<tr><td>Egress</td><td>Mandatory proxy. Private, internal, and cloud-metadata addresses unreachable.</td><td>Your machine's network</td></tr>
+<tr><td>Your local files</td><td>Bridged through the desktop app — <b>only while it is open</b>, with per-call permission checks</td><td>Direct</td></tr>
+<tr><td>Live artifacts</td><td>—</td><td>Desktop only</td></tr>
+</tbody>
+</table>
+
+<div class="callout warn">
+  <div class="c-head">⚠️ Remote sessions reach your local files only while the desktop app is open</div>
+  <p>Close the app and a remote task loses the bridge to your filesystem. It keeps running — it just cannot see your folders any more. If a task needs local files, leave the app running.</p>
+</div>
+
+<h2>Connected folders, not uploads</h2>
+<p>On desktop, Claude reads and writes files in folders you have connected. No manual uploading, no downloading results — the deck lands in your folder.</p>
+
+<h2>Permission modes</h2>
+<table class="doc">
+<thead><tr><th>Mode</th><th>Behaviour</th></tr></thead>
+<tbody>
+<tr><td><b>Manually approve</b></td><td>You approve each action</td></tr>
+<tr><td><b>Automatically approve</b></td><td>Claude screens each action and blocks anything it judges unsafe</td></tr>
+<tr><td><b>Skip all approvals</b></td><td>What it says</td></tr>
+</tbody>
+</table>
+<p>Deletions always require explicit permission, in every mode. Connector tokens never enter the sandbox — they are injected outside it.</p>
+
+<div class="callout warn">
+  <div class="c-head">⚠️ You remain responsible for what Claude does on your behalf</div>
+  <p>Anthropic's own wording. Prompt-injection defences exist — RL training, classifiers, action screening — but a task that reads untrusted content and has permission to act is a real risk surface. Scope the folders and connectors you attach.</p>
+</div>
+
+<h2>Projects and memory</h2>
+<p>Cowork has <span class="jargon" data-term="project">projects</span> for organising tasks. One wrinkle worth knowing: <b>within Cowork, memory works in projects only</b>, and your chat memory does not carry into Cowork yet.</p>
+
+<h2>Cost</h2>
+<p>Cowork consumes more of your allowance than chatting — it is running subagents and executing code. Paid plans only (Pro, Max, Team, Enterprise). Sessions cannot be shared.</p>
+
+<h2>Timeline, if you read conflicting posts</h2>
+<p>Research preview 12 January 2026 → GA on macOS and Windows 9 April 2026 → web and mobile beta 7 July 2026, rolling out from Max first.</p>
+
+<div class="sources">
+  <h3>Official sources</h3>
+  <ul>
+    <li><a href="https://support.claude.com/en/articles/13345190-get-started-with-claude-cowork">Get started with Claude Cowork</a></li>
+    <li><a href="https://support.claude.com/en/articles/14479288-claude-cowork-architecture-overview">Cowork architecture overview</a> — remote vs local, egress, tokens</li>
+    <li><a href="https://support.claude.com/en/articles/13364135-use-claude-cowork-safely">Use Claude Cowork safely</a> — permission modes, injection defences</li>
+    <li><a href="https://support.claude.com/en/articles/15520349-use-claude-cowork-on-web-desktop-and-mobile">Cowork on web, desktop and mobile</a></li>
+    <li><a href="https://support.claude.com/en/articles/14116274-organize-your-tasks-with-projects-in-claude-cowork">Projects in Cowork</a></li>
+    <li><a href="https://claude.com/blog/cowork-web-mobile">Cowork on web and mobile</a> — the &gt;90% statistic</li>
+    <li><a href="https://claude.com/blog/the-claude-cowork-product-guide">The Cowork product guide</a></li>
+  </ul>
+</div>
+`
+      },
+
+      {
+        id: "cowork-practice",
+        num: "3.3",
+        title: "Plugins, schedules & computer use",
+        html: `
+${VERIFIED}
+<p class="lead">The status report you build every Monday from Jira and Slack. You could describe it to Cowork every week — or teach it once and let it run at 8am while you sleep.</p>
+
+<p>Three features turn Cowork from a clever one-off into something that works when you aren't watching.</p>
+
+<h2>Plugins — capability bundles</h2>
+<p>A <span class="jargon" data-term="plugin">plugin</span> packages <span class="jargon" data-term="skill">skills</span>, <span class="jargon" data-term="connector">connectors</span>, and <span class="jargon" data-term="subagent">subagents</span> into one installable thing, sometimes with slash commands and <span class="jargon" data-term="hook">hooks</span>. Install from the <b>Customize</b> menu in the left sidebar → Plugins → Browse.</p>
+
+<p>There's a catalog by function — sales, finance, legal, marketing, HR, engineering, design, operations, data analysis — and a "Plugin Create" for building your own. Available on all paid plans.</p>
+
+<div class="callout warn">
+  <div class="c-head">⚠️ Half a plugin greys out in chat</div>
+  <p>Plugins work in web chat, the Desktop Chat tab, and Cowork — but <b>hooks and subagents only run in Cowork</b>. Install a plugin and find features greyed out in chat? That's why, and it's expected.</p>
+</div>
+
+<h2>Scheduled tasks</h2>
+<p>Type <code>/schedule</code> in any Cowork task, or use <b>Scheduled</b> in the sidebar. Cadences: hourly, daily, weekly, weekdays, or manual.</p>
+
+<div class="callout tip">
+  <div class="c-head">💡 They run without you</div>
+  <p>Scheduled tasks run remotely — <b>with no device online</b>. Your computer can be asleep or the app closed. That is the difference between "a macro I trigger" and "a thing that happens."</p>
+</div>
+
+<p>Caveat worth planning around: a scheduled task that needs <i>local</i> files still needs the desktop app open, because that bridge is what reaches your filesystem. Schedule tasks that live in connectors and the sandbox; keep local-file work interactive.</p>
+
+<h2>Computer use</h2>
+<p><span class="jargon" data-term="computer-use">Computer use</span> lets Claude drive your actual screen — clicking, typing, opening apps, taking screenshots to navigate. Research preview since 23 March 2026. <b>Pro and Max only</b>; Team and Enterprise do not have access. macOS and Windows desktop.</p>
+
+<h3>It is the last resort, by design</h3>
+<p>Claude tries in this order:</p>
+<ol>
+  <li><b>Connectors</b> — an API is precise and cheap</li>
+  <li><b>The browser</b> — via Claude in Chrome</li>
+  <li><b>Your screen</b> — only when nothing else can reach it</li>
+</ol>
+<p>That ordering is the right instinct. Driving a GUI by screenshot is slow and brittle; use it for the legacy desktop app with no API, not for things a connector already does.</p>
+
+<div class="callout warn">
+  <div class="c-head">⚠️ Guardrails, and where they stop</div>
+  <p>Finance, trading, and crypto apps are off-limits by default, and you can add your own app blocklist. Permission is per app. But an agent with mouse and keyboard on your machine is a broad grant — it is a research preview, and it deserves the caution that implies.</p>
+</div>
+
+<h2>Connectors</h2>
+<p>Cowork uses your existing MCP connector settings — nothing separate to configure. Work spanning Slack and Google Drive comes back with citations to the files and messages it used.</p>
+
+<h2>Putting it together</h2>
+<p>The Monday report: a plugin bundling your Jira and Slack connectors with a skill describing the report's shape, on a weekly <code>/schedule</code>. It runs at 8am from Anthropic's infrastructure whether or not your laptop is open, and the deck is waiting.</p>
+
+<div class="sources">
+  <h3>Official sources</h3>
+  <ul>
+    <li><a href="https://support.claude.com/en/articles/13837440-use-plugins-in-claude">Use plugins in Claude</a> — what they bundle, where they run</li>
+    <li><a href="https://support.claude.com/en/articles/13854387-schedule-recurring-tasks-in-claude-cowork">Schedule recurring tasks in Cowork</a></li>
+    <li><a href="https://support.claude.com/en/articles/14128542-let-claude-use-your-computer-in-cowork">Let Claude use your computer in Cowork</a></li>
+    <li><a href="https://support.claude.com/en/articles/14680753-extend-Claude-cowork-with-third-party-platforms">Extend Cowork with third-party platforms</a></li>
+    <li><a href="https://claude.com/blog/cowork-plugins">Cowork plugins</a></li>
+  </ul>
+</div>
+`
+      },
+
+      {
+        id: "one-task-three-surfaces",
+        num: "3.4",
+        title: "One task, three surfaces",
+        html: `
+${VERIFIED}
+<p class="lead">Same task: "Summarise this quarter's release notes for the customer success team." Chat, Cowork, and Claude Code will all attempt it. They produce different things, cost different amounts, and fail differently.</p>
+
+<p>The <a href="#ecosystem-map">ecosystem map</a> gives you the rule. This page is the worked example.</p>
+
+<h2>In chat</h2>
+<p>You paste the release notes in, or attach the files. Claude reads them, you steer, and it drafts a summary in the conversation. If you want a deck, it can generate one — file creation runs on all plans.</p>
+<p><b>You get:</b> a good draft, fast, with you in the loop every turn.<br>
+<b>It costs:</b> the least.<br>
+<b>It breaks when:</b> the notes are spread across 40 files in a folder you'd have to attach one by one.</p>
+
+<h2>In Cowork</h2>
+<p>You connect the folder and describe the outcome. Claude plans, fans out <span class="jargon" data-term="subagent">subagents</span> across the files, and returns a finished <code>.pptx</code> in your folder. You were making coffee.</p>
+<p><b>You get:</b> a deliverable, not a draft.<br>
+<b>It costs:</b> noticeably more of your allowance — subagents and code execution.<br>
+<b>It breaks when:</b> you actually wanted to shape the argument yourself. Delegation means accepting someone else's judgement calls.</p>
+
+<h2>In Claude Code</h2>
+<p>If the release notes are Markdown in a git repo, this is not a stretch — Claude Code reads the repo, greps the history, and writes a summary file with a commit.</p>
+<p><b>You get:</b> something version-controlled and reviewable as a diff.<br>
+<b>It costs:</b> similar to chat.<br>
+<b>It breaks when:</b> the source isn't in a repo. Claude Code is at home in a git checkout and awkward outside one.</p>
+
+<h2>Side by side</h2>
+<table class="doc">
+<thead><tr><th></th><th>Chat</th><th>Cowork</th><th>Claude Code</th></tr></thead>
+<tbody>
+<tr><td><b>You are…</b></td><td>in the loop every turn</td><td>away</td><td>reviewing diffs</td></tr>
+<tr><td><b>Work lives in</b></td><td>the conversation</td><td>connected folders and apps</td><td>a git repo</td></tr>
+<tr><td><b>Output</b></td><td>a draft (+ files if asked)</td><td>finished documents</td><td>committed files</td></tr>
+<tr><td><b>Runs when closed?</b></td><td>No</td><td>Yes — remote sessions</td><td>Yes — web / background</td></tr>
+<tr><td><b>Cost</b></td><td>$</td><td>$$$</td><td>$$</td></tr>
+<tr><td><b>Plans</b></td><td>All, incl. Free</td><td>Paid only</td><td>Paid only</td></tr>
+</tbody>
+</table>
+
+<div class="callout tip">
+  <div class="c-head">💡 The tiebreaker</div>
+  <p>Ask what you want to be doing while it runs. Thinking alongside it → chat. Something else entirely → Cowork. Reviewing its work like a colleague's PR → Claude Code.</p>
+</div>
+
+<h2>The mistake worth naming</h2>
+<p>Reaching for Cowork because it sounds the most powerful. It is the most <i>autonomous</i>, which is not the same thing. Autonomy is a cost you pay for not being there — you spend more allowance and you give up the small course-corrections that make chat feel so effective. If you are at your desk anyway, chat often gets you a better answer sooner.</p>
+
+<p>The mirror-image mistake: pasting file after file into chat because that's the surface you know, when the whole job was "read this folder."</p>
+
+<h2>They share one budget</h2>
+<p>Every surface draws from the same allowance — a rolling 5-hour session limit, plus weekly caps on paid plans. Choosing a surface is a spending decision. See <a href="#plans-limits">plans &amp; usage limits</a>.</p>
+
+<div class="sources">
+  <h3>Official sources</h3>
+  <ul>
+    <li><a href="https://claude.com/blog/the-claude-cowork-product-guide">The Claude Cowork product guide</a> — Anthropic's own chat vs Cowork vs Code framing</li>
+    <li><a href="https://support.claude.com/en/articles/13345190-get-started-with-claude-cowork">Get started with Cowork</a> — including relative usage cost</li>
+    <li><a href="https://support.claude.com/en/articles/12111783-create-and-edit-files-with-claude">Create and edit files with Claude</a></li>
+    <li><a href="https://support.claude.com/en/articles/11647753-how-do-usage-and-length-limits-work">How usage and length limits work</a></li>
+  </ul>
+</div>
+`
+      }
+    ]
+  },
+
+  /* ============================ PART 4 ============================ */
+  {
+    part: "Part 4 · claude.ai",
+    pages: [
+      {
+        id: "projects",
+        num: "4.1",
+        title: "Projects",
+        html: `
+${VERIFIED}
+<p class="lead">You explain your org's data model at the start of every conversation. Third time this week.</p>
+
+<p>A <span class="jargon" data-term="project">project</span> is a workspace with a knowledge base and its own instructions. Upload the docs once; every conversation in that project starts knowing them.</p>
+
+<h2>What goes in one</h2>
+<ul>
+  <li><b>Project knowledge</b> — documents, code, specs. Uploaded once, available to every chat inside.</li>
+  <li><b>Custom instructions</b> — per-project standing orders. "Answer as a Salesforce architect. Assume the managed package context."</li>
+  <li><b>Its own <span class="jargon" data-term="memory">memory</span></b> — each project keeps a separate memory space and summary. See <a href="#memory">4.3</a>.</li>
+</ul>
+
+<h2>When the knowledge base gets big</h2>
+<p>On paid plans, a project nearing the context limit automatically switches to a retrieval mode, expanding effective capacity <b>up to 10×</b>. Claude searches the knowledge base rather than holding all of it in the <span class="jargon" data-term="context-window">context window</span> at once.</p>
+
+<div class="callout tip">
+  <div class="c-head">💡 What that costs you</div>
+  <p>Retrieval means Claude sees the <i>relevant parts</i>, not everything. Great for a 200-document reference library. Worse if your question needs connections across documents that no single search surfaces. If precision matters more than breadth, a smaller, curated project beats a giant one.</p>
+</div>
+
+<h2>Good projects and bad ones</h2>
+<p><b>Good:</b> stable reference material with a clear boundary — your org's architecture docs, a coding-standards set, a client's requirements. Things that are true across many conversations.</p>
+<p><b>Bad:</b> a dumping ground. Every document is context Claude has to sift. A project with 300 stale files gives worse answers than one with the 12 that matter.</p>
+
+<div class="callout warn">
+  <div class="c-head">⚠️ Projects are not Claude Code's CLAUDE.md</div>
+  <p>Same instinct, different surfaces. Project instructions apply to chats on claude.ai; <a href="#memory-rules">CLAUDE.md</a> applies to Claude Code sessions in a repo. And <b>Cowork projects are separate again</b> — Cowork supports memory in projects only, and chat memory does not carry across. Three project-shaped things; do not assume they share state.</p>
+</div>
+
+<h2>Sharing</h2>
+<p>Projects can be shared, with visibility and member roles you control — useful for a team knowledge base where everyone's chats start from the same footing.</p>
+
+<div class="sources">
+  <h3>Official sources</h3>
+  <ul>
+    <li><a href="https://support.claude.com/en/articles/9517075-what-are-projects">What are projects</a> — knowledge, instructions, the 10× retrieval mode</li>
+    <li><a href="https://support.claude.com/en/articles/9519177-how-can-i-create-and-manage-projects">Create and manage projects</a></li>
+    <li><a href="https://support.claude.com/en/articles/9519189-manage-project-visibility-and-sharing">Project visibility and sharing</a></li>
+    <li><a href="https://support.claude.com/en/articles/14116274-organize-your-tasks-with-projects-in-claude-cowork">Projects in Cowork</a> — the separate one</li>
+  </ul>
+</div>
+`
+      },
+
+      {
+        id: "artifacts",
+        num: "4.2",
+        title: "Artifacts",
+        html: `
+${VERIFIED}
+<p class="lead">You ask for a chart of your org's object relationships. It appears in a panel beside the conversation, not as 200 lines of code you have to imagine rendering.</p>
+
+<p>An <span class="jargon" data-term="artifact">artifact</span> is standalone content in its own window — a document, a chart, a working app. Claude iterates on it in place while the conversation continues beside it.</p>
+
+<h2>What they can be</h2>
+<ul>
+  <li><b>Documents and diagrams</b> — the common case.</li>
+  <li><b>Interactive apps</b> — real HTML/JS that runs.</li>
+  <li><b>AI-powered artifacts</b> — apps that call Claude themselves. You can build, host, and share a small AI tool without a backend, an API key, or a deploy.</li>
+</ul>
+
+<div class="callout tip">
+  <div class="c-head">💡 The one people miss</div>
+  <p>AI-powered artifacts mean you can build an internal tool — a "paste an Apex error, get an explanation" widget — and share a link with your team. No hosting, no key management. For prototypes that would otherwise never get built, this is the shortest path there is.</p>
+</div>
+
+<h2>Publishing</h2>
+<p>Publishing makes an artifact public by link — available on Free, Pro, and Max. There's a curated <b>Inspiration</b> gallery under Artifacts in the sidebar, and you can remix what others published.</p>
+
+<div class="callout warn">
+  <div class="c-head">⚠️ Published means public</div>
+  <p>Anyone with the link can open it. An artifact built from your org's data, published to share with a colleague, is on the public internet. Check what's baked into it before you publish — and prefer sending a screenshot for anything sensitive.</p>
+</div>
+
+<h2>Editing in place</h2>
+<p>Since June 2026 you can edit an artifact directly rather than asking Claude to regenerate it. Fixing a typo yourself beats a round trip.</p>
+
+<h2>In Claude Code</h2>
+<p>Claude Code can publish session output as an artifact too — useful when the clearest answer to "what did you find?" is a rendered page rather than terminal text.</p>
+
+<div class="sources">
+  <h3>Official sources</h3>
+  <ul>
+    <li><a href="https://support.claude.com/en/articles/9487310-what-are-artifacts-and-how-do-i-use-them">What are artifacts</a></li>
+    <li><a href="https://support.claude.com/en/articles/9547008-publish-and-share-artifacts">Publish and share artifacts</a> — public-by-link, the gallery</li>
+    <li><a href="https://www.anthropic.com/news/claude-powered-artifacts">Claude-powered artifacts</a> · <a href="https://support.claude.com/en/articles/11649438-prototype-ai-powered-apps-with-claude-artifacts">Prototype AI-powered apps</a></li>
+    <li><a href="https://code.claude.com/docs/en/artifacts">Artifacts in Claude Code</a></li>
+  </ul>
+</div>
+`
+      },
+
+      {
+        id: "memory",
+        num: "4.3",
+        title: "Memory & chat search",
+        html: `
+${VERIFIED}
+<p class="lead">You told Claude you're a Salesforce engineer in March. In July, in a brand-new chat, it still knows.</p>
+
+<p>That is <span class="jargon" data-term="memory">memory</span> on claude.ai — and it is not the same mechanism as <a href="#memory-rules">Claude Code's auto memory</a> or the API's memory tool. Same word, three different things.</p>
+
+<h2>How it works</h2>
+<p>Claude summarises your conversations into a synthesis of key insights — your role, your projects, your preferences, how you like to work. It refreshes roughly every 24 hours and gets injected into new standalone chats.</p>
+
+<p>Note what that implies: memory is a <b>periodically-updated summary</b>, not a transcript. Something you said an hour ago may not be in it yet. It is a sketch of you, not a log.</p>
+
+<h2>You can read and edit it</h2>
+<p><b>Settings → Capabilities → View and edit memory.</b> This is the part people don't realise: it's not a black box. You can read what Claude thinks it knows, edit it directly, and correct anything wrong.</p>
+
+<div class="callout tip">
+  <div class="c-head">💡 Go read your memory once</div>
+  <p>If Claude keeps making an assumption you can't place — the wrong tech stack, a project you finished last year — it is probably written down. Two minutes in the editor fixes months of small annoyances.</p>
+</div>
+
+<table class="doc">
+<thead><tr><th>Control</th><th>Does</th></tr></thead>
+<tbody>
+<tr><td><b>Pause</b></td><td>Stops recording. Existing memory stays.</td></tr>
+<tr><td><b>Reset</b></td><td>Permanent delete.</td></tr>
+<tr><td><b>Import / export</b></td><td>Bring memories from another assistant, or back yours up.</td></tr>
+</tbody>
+</table>
+
+<h2>Project memory is separate</h2>
+<p>Each <span class="jargon" data-term="project">project</span> has its own memory space and its own summary. Client work in one project doesn't bleed into another. Useful for consultants and anyone whose contexts should stay apart.</p>
+
+<h2>Incognito chats</h2>
+<p>The ghost icon. Not saved to history, doesn't contribute to memory. Available on all plans. The right tool for the one-off question you don't want shaping every future conversation.</p>
+
+<h2>Chat search</h2>
+<p>Ask Claude to find previous conversations in plain language — "what did we decide about the trigger framework?" It searches your history. Pairs with memory: memory holds the gist, search finds the specifics.</p>
+
+<div class="callout warn">
+  <div class="c-head">⚠️ Three memories, one word</div>
+  <p><b>claude.ai memory</b> — summaries of your chats, editable in settings. <b>Claude Code auto memory</b> — machine-local notes per project, in <code>~/.claude/projects/</code>. <b>The memory tool</b> — an API feature writing to a directory you control. Nothing is shared between them. And Cowork supports memory in projects only, with chat memory not carrying across.</p>
+</div>
+
+<div class="sources">
+  <h3>Official sources</h3>
+  <ul>
+    <li><a href="https://support.claude.com/en/articles/11817273-use-claude-s-chat-search-and-memory-to-build-on-previous-context">Chat search and memory</a> — how the synthesis works, editing, incognito</li>
+    <li><a href="https://support.claude.com/en/articles/12123587-import-and-export-your-memory-from-claude">Import and export memory</a></li>
+    <li><a href="https://code.claude.com/docs/en/memory">Claude Code memory</a> — the different one</li>
+  </ul>
+</div>
+`
+      },
+
+      {
+        id: "research",
+        num: "4.4",
+        title: "Research & web search",
+        html: `
+${VERIFIED}
+<p class="lead">"Which Salesforce DevOps tools support this workflow, and what do teams actually say about them?" That is not a search — it's a dozen searches and a synthesis.</p>
+
+<p>Three features overlap here and people pick wrong. The distinction is worth two minutes.</p>
+
+<h2>Web search vs extended thinking vs Research</h2>
+<table class="doc">
+<thead><tr><th>Use</th><th>When</th></tr></thead>
+<tbody>
+<tr><td><b>Web search</b></td><td>You need a current fact. Toggle on, get a cited answer. All plans.</td></tr>
+<tr><td><b>Extended thinking</b></td><td>Hard reasoning over what Claude already knows. No lookup.</td></tr>
+<tr><td><b>Research</b></td><td>An open question needing many sources, gathered and reconciled into a report.</td></tr>
+</tbody>
+</table>
+
+<p>Anthropic publish their own guidance on choosing between them — it's linked below and worth reading once.</p>
+
+<h2>How Research runs</h2>
+<div class="mermaid">
+sequenceDiagram
+    participant You
+    participant C as Claude
+    participant W as The web / your apps
+    You->>C: An open question
+    Note over C: Plan: decompose into<br/>lines of enquiry
+    C->>W: Many searches, in parallel
+    W-->>C: Sources
+    Note over C: Read, reconcile,<br/>follow up on gaps
+    C->>W: Follow-up searches
+    W-->>C: More sources
+    C-->>You: Report with citations
+</div>
+<p class="diagram-caption">It is agentic: Claude decides what to look up next based on what it found.</p>
+
+<p>Enable it from the <b>+</b> menu → Research. It needs web search on. Listed under Pro on the pricing page.</p>
+
+<h2>Research over your own stuff</h2>
+<p>With the Google Workspace integration, Research can draw on Gmail, Calendar, and Docs alongside the web. "What did we agree with this client, and what has changed in the product since?" spans both — and that combination is where it earns its keep.</p>
+
+<div class="callout tip">
+  <div class="c-head">💡 Judge it by the citations</div>
+  <p>Every claim links its source. That's the feature — not the prose. Skim the citations first: if they're thin, the report is confident-sounding and unreliable. A cited report you can audit beats a fluent one you can't.</p>
+</div>
+
+<div class="callout warn">
+  <div class="c-head">⚠️ Research is not cheap</div>
+  <p>It runs many searches and reads a lot. On a subscription that comes out of the same allowance as everything else. Use it for questions that genuinely need a dozen sources — not for "what's the syntax for a Flow formula."</p>
+</div>
+
+<h2>Web search itself</h2>
+<p>Toggleable, cited, available globally on all plans including Free. When Claude answers from search it tells you where it looked — so you can check.</p>
+
+<div class="sources">
+  <h3>Official sources</h3>
+  <ul>
+    <li><a href="https://support.claude.com/en/articles/11088861-use-research-on-claude">Use Research</a> · <a href="https://support.claude.com/en/articles/11106443-using-research">Using Research</a></li>
+    <li><a href="https://support.claude.com/en/articles/11095361-when-should-i-use-web-search-extended-thinking-and-research">When to use web search, extended thinking, and Research</a></li>
+    <li><a href="https://support.claude.com/en/articles/11101545-using-research-and-google-workspace">Research and Google Workspace</a></li>
+    <li><a href="https://support.claude.com/en/articles/10684626-enable-and-use-web-search">Enable and use web search</a></li>
+  </ul>
+</div>
+`
+      },
+
+      {
+        id: "connectors-files",
+        num: "4.5",
+        title: "Skills, connectors & files",
+        html: `
+${VERIFIED}
+<p class="lead">"Build me a spreadsheet of these 200 records with a pivot and a chart." Claude writes Python, runs it, and hands you an .xlsx. On the free plan.</p>
+
+<p>Three capabilities turn chat from a text box into something that produces work. All three live under <b>Customize</b>, which since May 2026 is one directory for skills, connectors, and plugins.</p>
+
+<h2>File creation</h2>
+<p>Claude runs code in an isolated, sandboxed container to produce real files: <code>.xlsx</code> with working formulas, <code>.pptx</code>, <code>.docx</code>, PDFs, scripts, images. Up to 30 MB per file. <b>All plans, including Free.</b> Toggle it in Settings → Capabilities.</p>
+
+<div class="callout tip">
+  <div class="c-head">💡 This is also how Claude does maths properly</div>
+  <p>Asked to analyse numbers, Claude can compute them rather than predict them. "What's the median?" answered by running code is a different reliability class from one answered from a language model's intuition. If precision matters, ask it to calculate.</p>
+</div>
+
+<h2>Skills</h2>
+<p><span class="jargon" data-term="skill">Skills</span> are folders of instructions and optional scripts that Claude loads when relevant. Four kinds:</p>
+<ul>
+  <li><b>Anthropic's</b> — Excel, Word, PowerPoint, PDF. The reason generated files look properly made.</li>
+  <li><b>Custom</b> — yours. Markdown, plus scripts if needed.</li>
+  <li><b>Partner</b> — Notion, Figma, Atlassian, and others.</li>
+  <li><b>Organisation-provisioned</b> — on Team and Enterprise.</li>
+</ul>
+<p>Available on all tiers where code execution is enabled. Same <code>SKILL.md</code> format as <a href="#skills-commands">Claude Code skills</a> — an open spec, so a skill can travel between surfaces.</p>
+
+<h2>Connectors</h2>
+<p>A <span class="jargon" data-term="connector">connector</span> is a hosted <span class="jargon" data-term="mcp">MCP</span> server you toggle on. The Connectors Directory splits them into Anthropic-verified and community. Google Workspace (Gmail, Calendar, Drive) is available to all users.</p>
+<p>Gmail is read-only with draft creation — Claude can write a reply but not send it. Answers cite the files and messages they came from, and connector data isn't used for training.</p>
+
+<div class="callout warn">
+  <div class="c-head">⚠️ Custom connectors run from Anthropic's cloud, not your machine</div>
+  <p>The single most misunderstood thing here. Add a custom connector by URL and <b>Anthropic's infrastructure</b> connects to it — from every client, including the Desktop app. Your MCP server must be reachable from Anthropic's IP ranges. It cannot be on localhost or behind your VPN.</p>
+  <p>For a local server, you want <a href="#desktop-app">Desktop extensions</a> or <a href="#mcp">Claude Code's MCP</a>. Same protocol; opposite networking model.</p>
+</div>
+
+<h2>Picking between them</h2>
+<table class="doc">
+<thead><tr><th>You want Claude to…</th><th>Use</th></tr></thead>
+<tbody>
+<tr><td>Follow your process reliably</td><td>A <b>skill</b></td></tr>
+<tr><td>Reach a system it can't see</td><td>A <b>connector</b></td></tr>
+<tr><td>Produce a real file</td><td><b>File creation</b> — already on</td></tr>
+<tr><td>All three, packaged</td><td>A <b><span class="jargon" data-term="plugin">plugin</span></b> (Cowork)</td></tr>
+</tbody>
+</table>
+
+<div class="sources">
+  <h3>Official sources</h3>
+  <ul>
+    <li><a href="https://support.claude.com/en/articles/12111783-create-and-edit-files-with-claude">Create and edit files</a> — the sandbox, formats, limits</li>
+    <li><a href="https://support.claude.com/en/articles/12512176-what-are-skills">What are skills</a></li>
+    <li><a href="https://support.claude.com/en/articles/11176164-use-connectors-to-extend-claude-s-capabilities">Use connectors</a> · <a href="https://support.claude.com/en/articles/11596036-anthropic-connectors-directory-faq">Connectors Directory FAQ</a></li>
+    <li><a href="https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp">Custom connectors via remote MCP</a> — the cloud-side model</li>
+    <li><a href="https://support.claude.com/en/articles/10166901-use-google-workspace-connectors">Google Workspace connectors</a></li>
+    <li><a href="https://support.claude.com/en/articles/14328846-browse-skills-connectors-and-plugins-in-one-directory">The unified Customize directory</a></li>
+  </ul>
+</div>
+`
+      },
+
+      {
+        id: "plans-limits",
+        num: "4.6",
+        title: "Plans & usage limits",
+        html: `
+${VERIFIED}
+<p class="lead">It's Thursday afternoon and Claude says you've hit your weekly limit. What actually ran you out?</p>
+
+<p>Probably not what you think. The limits are simple once you see them; the surprise is that everything shares one budget.</p>
+
+<h2>The plans</h2>
+<table class="doc">
+<thead><tr><th>Plan</th><th>Price</th><th>Gets you</th></tr></thead>
+<tbody>
+<tr><td><b>Free</b></td><td>$0</td><td>Chat, file creation, skills, web search, memory. <b>No Claude Code, no Cowork.</b></td></tr>
+<tr><td><b>Pro</b></td><td>$20/mo<br><small>$17 billed annually</small></td><td>≥5× Free usage. Claude Code, Cowork, Research, Design, Science.</td></tr>
+<tr><td><b>Max 5×</b></td><td>$100/mo</td><td>5× Pro usage</td></tr>
+<tr><td><b>Max 20×</b></td><td>$200/mo</td><td>20× Pro usage, higher output limits, early access to new features</td></tr>
+</tbody>
+</table>
+<p>Team and Enterprise exist above these; this site doesn't cover their administration.</p>
+
+<h2>Two limits, stacked</h2>
+<ul>
+  <li><b>A rolling 5-hour session limit</b> — every plan.</li>
+  <li><b>Weekly limits</b> — paid plans, resetting at a fixed time for your account.</li>
+</ul>
+<p>The weekly reset shows two numbers: one for <b>Opus</b> specifically, and one for all other models. So heavy Opus use can wall you off from Opus while leaving Sonnet available.</p>
+<p><b>Settings → Usage</b> shows progress bars. Look there before guessing.</p>
+
+<div class="callout warn">
+  <div class="c-head">⚠️ Every surface spends the same budget</div>
+  <p>Anthropic's wording: usage of all Claude surfaces — claude.ai, Claude Code, Claude Desktop — counts toward the same limit. The Thursday wall is usually a long Claude Code session, not your chats. And <a href="#cowork">Cowork</a> costs noticeably more than chatting.</p>
+</div>
+
+<h2>What actually burns it</h2>
+<ul>
+  <li><b>Model choice.</b> Fable 5 drains fastest, then Opus, then Sonnet, then Haiku. See <a href="#choosing">choosing a model</a>.</li>
+  <li><b>Conversation length.</b> The whole transcript is re-sent every turn — turn 50 costs far more than turn 2. See <a href="#how-claude-thinks">how Claude thinks</a>.</li>
+  <li><b>Agentic work.</b> Cowork tasks, subagents, and Research run many turns you never see.</li>
+  <li><b><span class="jargon" data-term="effort">Effort</span>.</b> Thinking tokens bill as output — the 5×-priced kind.</li>
+</ul>
+
+<div class="callout tip">
+  <div class="c-head">💡 How to not hit the wall</div>
+  <p>Default to Sonnet 5 and raise <span class="jargon" data-term="effort">effort</span> when a task needs it, rather than defaulting to the biggest model. <code>/clear</code> between unrelated tasks instead of letting one session run all day. Save Opus for work that's actually hard. That is usually the whole fix.</p>
+</div>
+
+<h2>Usage credits</h2>
+<p>Paid plans can buy <span class="jargon" data-term="usage-credits">usage credits</span> for extra capacity — also how you reach Fable 5 beyond your included allocation.</p>
+
+<h2>Context windows on a plan</h2>
+<p>On paid plans the newest models offer up to a 1M-token <span class="jargon" data-term="context-window">context window</span>; others are 500K or 200K. Automatic <span class="jargon" data-term="compaction">context management</span> summarises older messages when you approach the limit, so long chats continue rather than stopping.</p>
+
+<div class="sources">
+  <h3>Official sources</h3>
+  <ul>
+    <li><a href="https://claude.com/pricing">Pricing</a> — the plan matrix</li>
+    <li><a href="https://support.claude.com/en/articles/11647753-how-do-usage-and-length-limits-work">How usage and length limits work</a> — one pool, context windows</li>
+    <li><a href="https://support.claude.com/en/articles/9797557-usage-limit-best-practices">Usage limit best practices</a> — the 5-hour and weekly limits</li>
+    <li><a href="https://support.claude.com/en/articles/8325606-what-is-the-pro-plan">What is the Pro plan</a> · <a href="https://support.claude.com/en/articles/11049741-what-is-the-max-plan">What is the Max plan</a></li>
+    <li><a href="https://support.claude.com/en/articles/12429409-manage-usage-credits-for-paid-claude-plans">Manage usage credits</a></li>
+    <li><a href="https://support.claude.com/en/articles/11145838-use-claude-code-with-your-pro-or-max-plan">Claude Code on Pro or Max</a></li>
   </ul>
 </div>
 `

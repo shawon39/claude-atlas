@@ -125,5 +125,25 @@ const GLOSSARY = {
   "tool-search": {
     term: "Tool search",
     def: "Loading MCP tool schemas only when needed. Tool names sit in context at startup; the full JSON schemas stay deferred until Claude actually reaches for one. It is why 20 MCP servers don't drown your context window."
+  },
+  "mcpb": {
+    term: "Desktop extension (.mcpb)",
+    def: "A local MCP server bundled into a single installable file — a zip with a manifest. Renamed from .dxt (old .dxt files still work). Claude Desktop ships a Node runtime, so most extensions install with one click and no toolchain."
+  },
+  "computer-use": {
+    term: "Computer use",
+    def: "Claude driving your actual screen — taking screenshots, clicking, typing, opening apps. A research preview in Cowork, Pro and Max only. It is the last resort: Claude tries connectors first, then the browser, then your screen."
+  },
+  "plugin": {
+    term: "Plugin",
+    def: "A Cowork bundle: skills, connectors, and subagents packaged together, sometimes with slash commands and hooks. Installed from the Customize menu. Hooks and subagents only run in Cowork, so they grey out in chat."
+  },
+  "sandbox": {
+    term: "Sandbox",
+    def: "The isolated, temporary environment on Anthropic's servers where Cowork runs code and shell commands. Egress goes through a mandatory proxy, private and cloud-metadata addresses are unreachable, and your connector tokens never enter it."
+  },
+  "usage-credits": {
+    term: "Usage credits",
+    def: "Extra capacity you can buy on a paid plan when you exhaust your allowance. Also how Fable 5 is reached beyond what your plan includes."
   }
 };
