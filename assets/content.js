@@ -1641,7 +1641,7 @@ ${VERIFIED}
     <li><a href="https://support.claude.com/en/articles/13837440-use-plugins-in-claude">Use plugins in Claude</a> — what they bundle, where they run</li>
     <li><a href="https://support.claude.com/en/articles/13854387-schedule-recurring-tasks-in-claude-cowork">Schedule recurring tasks in Cowork</a></li>
     <li><a href="https://support.claude.com/en/articles/14128542-let-claude-use-your-computer-in-cowork">Let Claude use your computer in Cowork</a></li>
-    <li><a href="https://support.claude.com/en/articles/14680753-extend-Claude-cowork-with-third-party-platforms">Extend Cowork with third-party platforms</a></li>
+    <li><a href="https://support.claude.com/en/articles/11176164-use-connectors-to-extend-claude-s-capabilities">Use connectors to extend Claude's capabilities</a></li>
     <li><a href="https://claude.com/blog/cowork-plugins">Cowork plugins</a></li>
   </ul>
 </div>

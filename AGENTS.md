@@ -83,7 +83,11 @@ These are not style preferences. They are what keeps the site true and maintaina
   - `node --check assets/content.js` catches both. Run it before every push.
 - Mermaid inside `content.js` is a JS string, not HTML, so write `-->` normally (**not** `--&gt;`).
 - Every `data-term` slug must exist in `GLOSSARY` or the tooltip silently does nothing.
-- Bump the `?v=` query on the script/style tags in `index.html` when you want to bust caches.
+- Bump the `?v=` query on the script/style tags in `index.html` after a content change. GitHub
+  Pages sends `cache-control: max-age=600`, so a stale asset self-heals within 10 minutes — the
+  bump is for seeing your own change immediately, not for correctness.
+- `404.html` uses **absolute** `/claude-atlas/` paths: Pages serves it for missing paths at any
+  depth, so relative links would break.
 
 ## Scope boundaries
 
