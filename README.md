@@ -38,7 +38,7 @@ Contributor guidance — content rules, markup vocabulary, gotchas — is in [AG
 
 ## Features
 
-- **Jargon Decoder** — 35 terms. Hover any dotted word for a definition, click to open the full
+- **Jargon Decoder** — 38 terms. Hover any dotted word for a definition, click to open the full
   glossary. The 📖 button opens it anywhere.
 - **Light / dark** — follows your OS, with a toggle that persists.
 - **Search** — filters the sidebar and auto-expands matching sections.
@@ -58,6 +58,7 @@ Push to `main`. Pages is set to deploy from the branch root — no build, no Act
 | Part 3 · Desktop & Cowork | Complete |
 | Part 4 · claude.ai | Complete |
 | Part 5 · Recipes | Complete |
+| Part 6 · Productivity | Complete |
 
 All sections written. Ongoing job is the monthly sweep — see
 [5.4 · Staying current](https://shawon39.github.io/claude-atlas/#staying-current) for the routine and

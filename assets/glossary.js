@@ -145,5 +145,17 @@ const GLOSSARY = {
   "usage-credits": {
     term: "Usage credits",
     def: "Extra capacity you can buy on a paid plan when you exhaust your allowance. Also how Fable 5 is reached beyond what your plan includes."
+  },
+  "system-reminder": {
+    term: "System reminder",
+    def: "The wrapper Claude Code puts around your CLAUDE.md before showing it to the model. It tells Claude the content may or may not be relevant and not to respond to it unless it is. This is why CLAUDE.md is advisory rather than enforced — and why hooks exist."
+  },
+  "agentic-engineering": {
+    term: "Agentic engineering",
+    def: "The 2026 successor to \"vibe coding\". Vibe coding raises the floor — anyone can produce something. Agentic engineering preserves the quality bar: you supply the tests, the architecture, and the review, and the agent supplies the throughput."
+  },
+  "opusplan": {
+    term: "opusplan",
+    def: "A model setting where Opus does the planning and Sonnet does the implementing. Buys Opus-quality decisions at closer to Sonnet cost, because planning is the part that needs the judgement."
   }
 };

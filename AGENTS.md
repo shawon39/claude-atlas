@@ -49,15 +49,20 @@ These are not style preferences. They are what keeps the site true and maintaina
    then the concept, then the reference detail. Never open with a definition.
 4. **Cite every factual claim.** End each page with a `<div class="sources">` block. Cite only:
    `platform.claude.com` (API/platform), `code.claude.com` (Claude Code), `support.claude.com`
-   (consumer apps), `anthropic.com/news` and `claude.com/blog` (announcements). Other domains are
-   stale mirrors.
-5. **Date every page.** Start the `html` with `${VERIFIED}`. Bump the `VERIFIED` constant — or make it
+   (consumer apps), `anthropic.com/news` and `claude.com/blog` (announcements),
+   `anthropic.com/engineering` (best-practice and research posts). Other domains are stale mirrors.
+   **Verify every URL resolves before publishing** — a dead citation is worse than none. An audit
+   in July 2026 found a hallucinated support-article ID that had shipped.
+5. **Opinion is allowed, but label it.** Pages may give recommendations (which model, which habit) —
+   that is the point of the site. Keep facts cited and opinions clearly the author's. Where advice
+   comes from community practice rather than official guidance, say so.
+6. **Date every page.** Start the `html` with `${VERIFIED}`. Bump the `VERIFIED` constant — or make it
    per-page — when you re-check facts. This is the site's main defence against going stale.
-6. **Flag deprecations loudly.** `<div class="callout warn">` with a `<div class="c-head">⚠️ …</div>`.
-7. **Mermaid for flows and architecture only.** `<div class="mermaid">…</div>`, one or two per page.
+7. **Flag deprecations loudly.** `<div class="callout warn">` with a `<div class="c-head">⚠️ …</div>`.
+8. **Mermaid for flows and architecture only.** `<div class="mermaid">…</div>`, one or two per page.
    Never for lists or hierarchies a table handles better. Add a `<p class="diagram-caption">`.
-8. **Don't transcribe official reference tables.** Link them; explain the 20% people actually use.
-9. **Omit what can't be verified.** If official docs are unclear or conflicting, say so or leave it
+9. **Don't transcribe official reference tables.** Link them; explain the 20% people actually use.
+10. **Omit what can't be verified.** If official docs are unclear or conflicting, say so or leave it
    out. Never guess.
 
 ## Markup vocabulary
@@ -104,5 +109,5 @@ plus the [Claude Code changelog](https://code.claude.com/docs/en/changelog) and
 [model deprecations](https://platform.claude.com/docs/en/about-claude/model-deprecations). Sweep
 monthly: check what changed, patch affected pages, bump the verified date.
 
-Known expiries to action: Opus 4.7 fast mode removed **24 Jul 2026**; Opus 4.1 retires
-**5 Aug 2026**; Claude Tag cutover **3 Aug 2026**.
+Known expiries to action: Opus 4.7 fast mode removed **24 Jul 2026**; Claude Tag cutover
+**3 Aug 2026**; Opus 4.1 retires **5 Aug 2026**; Sonnet 5 intro pricing ends **31 Aug 2026**.

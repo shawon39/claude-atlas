@@ -2247,11 +2247,12 @@ safe / needs migration / do not do this.</code></pre>
 </div>
 
 <h2>Part 2 — the org, via MCP</h2>
-<p>A Salesforce <span class="jargon" data-term="mcp">MCP</span> server gives Claude tools to query your org: run SOQL, describe objects, read metadata, check dependencies. Add it scoped to the project:</p>
+<p>A Salesforce <span class="jargon" data-term="mcp">MCP</span> server gives Claude tools to query your org: run SOQL, describe objects, read metadata, check dependencies. Salesforce publish an official one — <a href="https://github.com/salesforcecli/mcp"><code>salesforcecli/mcp</code></a>, the DX MCP Server. It runs locally against your existing SF CLI credentials, and it <b>requires</b> you to name the orgs it may touch:</p>
 
-<pre><code>claude mcp add salesforce --transport stdio -- &lt;your-salesforce-mcp-server&gt;</code></pre>
+<pre><code>claude mcp add salesforce --transport stdio -- \\
+  npx -y @salesforce/mcp --orgs my-dev-sandbox</code></pre>
 
-<p>Which server you use is your choice — the pattern is what matters. Once connected, <code>/mcp</code> shows its status and what it costs you in context.</p>
+<p>Once connected, <code>/mcp</code> shows its status and what it costs you in context. See <a href="#salesforce-setup">6.5</a> for the setup in full — including why this is <i>not</i> the same product as Salesforce's Hosted MCP.</p>
 
 <div class="callout warn">
   <div class="c-head">⚠️ Point it at a sandbox</div>
@@ -2487,6 +2488,539 @@ ${VERIFIED}
     <li><a href="https://platform.claude.com/docs/en/about-claude/model-deprecations">Model deprecations</a> — the authoritative table</li>
     <li><a href="https://platform.claude.com/docs/en/about-claude/models/migration-guide">Migration guide</a></li>
     <li><a href="https://support.claude.com/en/articles/14503520-available-beta-and-research-preview-features">Beta and research preview features</a></li>
+  </ul>
+</div>
+`
+      }
+    ]
+  },
+
+  /* ============================ PART 6 ============================ */
+  {
+    part: "Part 6 · Productivity",
+    pages: [
+      {
+        id: "four-layers",
+        num: "6.1",
+        title: "The four layers",
+        html: `
+${VERIFIED}
+<p class="lead">You want Claude to stop writing SOQL in loops. Where does that instruction go — <code>CLAUDE.md</code>? A rule? A skill? A hook? Pick wrong and it gets ignored.</p>
+
+<p>This is the single most useful thing to get right, and the answer changed during 2025–26. Most advice you'll read online is answering an older question.</p>
+
+<h2>What changed</h2>
+<p>In 2025, <span class="jargon" data-term="claude-md">CLAUDE.md</span> was <i>the</i> lever — everything went in it, and files grew to 800 lines. In 2026 Anthropic split the job across four mechanisms and stated the division plainly:</p>
+
+<div class="callout tip">
+  <div class="c-head">💡 Anthropic's own framing</div>
+  <p>"Procedures belong in skills. <b>CLAUDE.md is for facts</b> Claude should hold all the time: build commands, monorepo layout, team conventions." And: "Keep CLAUDE.md under 200 lines, give it an owner, and <b>review changes to it like code</b>."</p>
+</div>
+
+<h2>Where each thing goes</h2>
+<table class="doc">
+<thead><tr><th>Layer</th><th>For</th><th>Costs you</th></tr></thead>
+<tbody>
+<tr>
+  <td><b><code>CLAUDE.md</code></b></td>
+  <td><b>Facts</b>, always true. Build commands, repo layout, conventions. Increasingly just a router pointing elsewhere.</td>
+  <td>Every request, forever</td>
+</tr>
+<tr>
+  <td><b><code>.claude/rules/</code></b><br><small>with a <code>paths</code> glob</small></td>
+  <td><b>Hard constraints scoped to files.</b> Apex rules that load only when Claude opens Apex.</td>
+  <td>Nothing until a matching file is read</td>
+</tr>
+<tr>
+  <td><b><span class="jargon" data-term="skill">Skills</span></b></td>
+  <td><b>Procedures.</b> Anything with steps. A 30-line checklist belongs here, not in CLAUDE.md.</td>
+  <td>One description line, until invoked</td>
+</tr>
+<tr>
+  <td><b><span class="jargon" data-term="hook">Hooks</span></b></td>
+  <td><b>Enforcement.</b> Things that must happen every time, whatever the model decides.</td>
+  <td>Nothing in context — it's your code</td>
+</tr>
+</tbody>
+</table>
+
+<h2>So: no SOQL in loops?</h2>
+<p>Not <code>CLAUDE.md</code> — it isn't true of every request, and it competes with everything else on every turn. Options, in order of strength:</p>
+<ol>
+  <li><b><code>.claude/rules/apex.md</code></b> with <code>paths: ["force-app/**/*.cls"]</code>. Free until relevant. Start here.</li>
+  <li><b>A PMD rule and a hook</b> that runs it after every edit. Now it is <i>enforced</i>, not requested.</li>
+  <li><b>ApexGuru</b>, if you have it — see <a href="#salesforce-setup">6.5</a>.</li>
+</ol>
+
+<div class="callout tip">
+  <div class="c-head">💡 The rule practitioners keep rediscovering</div>
+  <p><b>Never send an LLM to do a linter's job.</b> Independently arrived at across many community write-ups, and it follows from the layers above: a linter is deterministic, costs a fraction of a cent, and can't be argued with. An instruction is a suggestion competing for attention. If a linter can catch it, that is where it belongs.</p>
+</div>
+
+<h2>The compaction trap nobody mentions</h2>
+<p>Scoping rules to paths has a cost that is not obvious. When <span class="jargon" data-term="compaction">compaction</span> fires mid-session:</p>
+
+<table class="doc">
+<thead><tr><th>Survives?</th><th>What</th></tr></thead>
+<tbody>
+<tr><td><b>Re-injected from disk</b></td><td>Project-root <code>CLAUDE.md</code>, unscoped rules, auto <span class="jargon" data-term="memory">memory</span></td></tr>
+<tr><td><b>Lost</b> until a matching file is read again</td><td>Rules with a <code>paths</code> glob · nested <code>CLAUDE.md</code> in subdirectories</td></tr>
+</tbody>
+</table>
+
+<p>So a rule that <i>must</i> hold for a whole long session — a security constraint, say — should not be path-scoped. Drop the glob or move it to the project root and pay the context cost deliberately.</p>
+
+<h2>The 200-line number, honestly</h2>
+<p>Anthropic says under 200 lines. That's their number and it's the one to follow. But be aware the wider "keep it short" consensus rests on <b>very little</b>: essentially that one figure plus one influential community post, repeated. At least one well-known practitioner runs an ~800-line file and reports it works fine.</p>
+<p>Treat 200 as a strong default, not physics. The real test is the one on the <a href="#claude-md-ignored">next page</a>.</p>
+
+<div class="callout warn">
+  <div class="c-head">⚠️ Two current Anthropic docs contradict each other</div>
+  <p>The best-practices page says you can improve adherence with emphasis — "IMPORTANT", "YOU MUST". The model-migration guide says exactly that phrasing now <b>overtriggers</b> on 4.6-and-later models, and recommends softening <code>CRITICAL: You MUST use this tool when…</code> to <code>Use this tool when…</code>.</p>
+  <p>Both are live. The migration guide is model-specific and about newer behaviour, so trust it for current models. Mentioned because it will trip you.</p>
+</div>
+
+<div class="sources">
+  <h3>Official sources</h3>
+  <ul>
+    <li><a href="https://claude.com/blog/steering-claude-code-skills-hooks-rules-subagents-and-more">Steering Claude Code</a> — the four-layer split, the 200-line figure, facts-vs-procedures</li>
+    <li><a href="https://code.claude.com/docs/en/best-practices">Best practices</a> — writing an effective CLAUDE.md</li>
+    <li><a href="https://code.claude.com/docs/en/memory">Memory</a> — rules, paths globs, compaction behaviour</li>
+    <li><a href="https://platform.claude.com/docs/en/about-claude/models/migration-guide">Migration guide</a> — why aggressive phrasing now overtriggers</li>
+    <li><a href="https://claude.com/blog/how-claude-code-works-in-large-codebases-best-practices-and-where-to-start">Claude Code in large codebases</a> — "lean and layered"</li>
+  </ul>
+</div>
+`
+      },
+
+      {
+        id: "claude-md-ignored",
+        num: "6.2",
+        title: "Why Claude ignores your CLAUDE.md",
+        html: `
+${VERIFIED}
+<p class="lead">You wrote the rule. It's right there in <code>CLAUDE.md</code>. Claude ignored it anyway — and it will do it again tomorrow.</p>
+
+<p>This is the most-repeated complaint about Claude Code, continuously, across every model release. It is not a bug, and it is not you being bad at writing instructions. There is a mechanism.</p>
+
+<h2>The mechanism</h2>
+<p><code>CLAUDE.md</code> is not part of the system prompt. It is delivered as a <b>user message</b>, wrapped in a <span class="jargon" data-term="system-reminder">system reminder</span> that says, roughly:</p>
+
+<blockquote>
+  <p><i>"IMPORTANT: this context may or may not be relevant to your tasks. You should not respond to this context unless it is highly relevant to your task."</i></p>
+</blockquote>
+
+<p>Read that again. Claude is <b>explicitly told to discount your CLAUDE.md unless it judges it relevant</b>. When Claude ignores your rule, it is following instructions — just not yours.</p>
+
+<div class="callout tip">
+  <div class="c-head">💡 Where this comes from</div>
+  <p>This is <b>community research, not official documentation</b> — discovered by proxying the API and reading what actually gets sent, and reproducible the same way. Anthropic's docs corroborate the effect without describing the mechanism: they call CLAUDE.md instructions <b>advisory</b>, in contrast to hooks, which are <b>deterministic</b>.</p>
+</div>
+
+<p>That single word — advisory — is the whole story. If you need a guarantee, you need a <span class="jargon" data-term="hook">hook</span>.</p>
+
+<h2>What predicts whether a rule sticks</h2>
+<p>The best taxonomy comes from practitioners, and it explains why people's experiences differ so wildly:</p>
+
+<table class="doc">
+<thead><tr><th>Kind of instruction</th><th>Does it work?</th></tr></thead>
+<tbody>
+<tr>
+  <td><b>Facts</b><br><small>"Tests run with <code>npm run test:unit</code>"</small></td>
+  <td><b>Always.</b> No controversy. Claude cannot guess these and has no competing instinct.</td>
+</tr>
+<tr>
+  <td><b>Regression constraints</b><br><small>Tied to a failure you actually saw, one sentence each</small></td>
+  <td><b>Consistently</b>, if short and specific.</td>
+</tr>
+<tr>
+  <td><b>Behaviour rules from scratch</b><br><small>Written in anticipation of a problem you haven't had</small></td>
+  <td><b>Usually not followed.</b></td>
+</tr>
+</tbody>
+</table>
+
+<p>That last row is why the "does CLAUDE.md even work?" argument never resolves. People who fill it with commands and layout say it works. People who fill it with aspirational style preferences say it's useless. <b>Both are reporting accurately.</b></p>
+
+<h2>Why your style rule loses</h2>
+<p>A developer asked Claude directly why it kept ignoring his formatting preference. The answer: <b>the surrounding code was like that, so it followed that style.</b></p>
+<p>Your codebase is a much louder instruction than your CLAUDE.md. Thousands of lines of existing convention versus one bullet point — the bullet point loses. This is the strongest argument for the linter rule in <a href="#four-layers">6.1</a>: change the code, or change the check, not the prose.</p>
+
+<h2>Four ways to write rules that stick</h2>
+<ul>
+  <li><b>Phrase positively.</b> "Always clarify intent before acting" beats "Never act without checking" — telling a model not to do something can prime the thing. The pink-elephant problem.</li>
+  <li><b>Remove contradictions.</b> Two conflicting instructions don't fight it out; Claude tends to <b>ignore both</b>. Conflicts across a user file, a project file, and a nested file are easy to create by accident.</li>
+  <li><b>Write from observed failures</b>, not imagined ones. If it hasn't gone wrong yet, you're guessing.</li>
+  <li><b>Cut anything a linter could catch.</b> The model already infers style from surrounding code — a style section is context spent for nothing.</li>
+</ul>
+
+<div class="callout warn">
+  <div class="c-head">⚠️ The canary trick doesn't prove what you think</div>
+  <p>A popular tip: put "always call me Mr Tinkleberry" in CLAUDE.md, and if Claude uses the name you know it read the file. It doesn't work as a test. You're filling the conversation with turns reinforcing that one behaviour — and Claude can happily greet you correctly <b>while ignoring every rule that matters</b>. Compliance on a trivial instruction is not evidence of compliance on an important one.</p>
+</div>
+
+<h2>Anthropic's own diagnosis</h2>
+<p>Worth knowing, because it's checkable: <i>"If Claude keeps doing something you don't want despite having a rule against it, the file is probably too long and the rule is getting lost."</i></p>
+<p>The prescribed test, per line: <b>"Would removing this cause Claude to make mistakes?"</b> If not, cut it. And if Claude already does the thing correctly without the instruction, delete it — or convert it to a hook.</p>
+
+<div class="callout tip">
+  <div class="c-head">💡 The honest summary</div>
+  <p>CLAUDE.md is a <b>reliable place for facts</b> and an <b>unreliable place for behaviour</b>. Put commands and layout in it. Put procedures in skills, scoped constraints in rules, and anything that must not fail in a hook. Stop trying to win an argument with a file that Claude has been told to treat as optional.</p>
+</div>
+
+<div class="sources">
+  <h3>Official sources</h3>
+  <ul>
+    <li><a href="https://code.claude.com/docs/en/best-practices">Best practices</a> — the pruning test, the too-long diagnosis</li>
+    <li><a href="https://code.claude.com/docs/en/memory">Memory</a> — conflicting instructions, <code>/memory</code> to check what loaded</li>
+    <li><a href="https://code.claude.com/docs/en/hooks">Hooks</a> — deterministic enforcement vs advisory instructions</li>
+    <li><a href="https://claude.com/blog/steering-claude-code-skills-hooks-rules-subagents-and-more">Steering Claude Code</a></li>
+  </ul>
+  <h3>Community research (labelled, not official)</h3>
+  <ul>
+    <li><a href="https://www.humanlayer.dev/blog/writing-a-good-claude-md">Writing a good CLAUDE.md</a> — HumanLayer, Nov 2025. The system-reminder finding, obtained by proxying the API. The only claim here backed by an inspectable method rather than anecdote.</li>
+  </ul>
+</div>
+`
+      },
+
+      {
+        id: "session-loop",
+        num: "6.3",
+        title: "The session loop",
+        html: `
+${VERIFIED}
+<p class="lead">Two engineers give Claude the same task. One gets a working fix in ten minutes. The other spends an hour correcting, re-explaining, and eventually doing it themselves. The difference is rarely the prompt.</p>
+
+<h2>1. Give Claude a way to verify its work</h2>
+<p>This is now the <b>first section</b> of Anthropic's best-practices page — it displaced explore-plan-code as the headline advice. It is also the only tip that every independent source repeats.</p>
+
+<div class="callout tip">
+  <div class="c-head">💡 Why it matters more than anything else</div>
+  <p>Anthropic's framing: "Claude stops when the work <i>looks</i> done. Without a check it can run, 'looks done' is the only signal available, and <b>you become the verification loop</b>: every mistake waits for you to notice it."</p>
+</div>
+
+<p>Give it something that returns pass or fail and the loop closes itself. A test suite, a build exit code, a linter, a script that diffs against a fixture, a screenshot to compare.</p>
+
+<table class="doc">
+<thead><tr><th>Instead of</th><th>Say</th></tr></thead>
+<tbody>
+<tr><td><i>"add validation to the Account trigger"</i></td><td><i>"add validation to the Account trigger. Write a failing test for a blank BillingCountry first, then make it pass. Run <code>sf apex run test</code> and show me the output."</i></td></tr>
+<tr><td><i>"the deploy is failing"</i></td><td><i>"the deploy fails with this error: [paste]. Fix it and verify with <code>--dry-run</code>. Address the root cause, don't suppress it."</i></td></tr>
+</tbody>
+</table>
+
+<p>Then decide <b>how hard the check gates</b>. Anthropic's four tiers, weakest to strongest:</p>
+<ol>
+  <li><b>In one prompt</b> — "run the tests and iterate until they pass."</li>
+  <li><b>Across a session</b> — <code>/goal</code> sets a condition an evaluator re-checks every turn.</li>
+  <li><b>A deterministic gate</b> — a Stop <span class="jargon" data-term="hook">hook</span> blocks the turn from ending until your script passes. (Claude Code overrides it after 8 consecutive blocks.)</li>
+  <li><b>A second opinion</b> — a verification <span class="jargon" data-term="subagent">subagent</span> with fresh context that didn't write the code.</li>
+</ol>
+
+<p>And ask for <b>evidence, not assertion</b>. "Tests pass" is a claim. The pasted test output is a fact.</p>
+
+<h2>2. Plan first — but not always</h2>
+<p><span class="jargon" data-term="plan-mode">Plan mode</span> is the standard advice, and it's good advice. The caveat most guides omit is Anthropic's own: <b>planning adds overhead.</b> Skip it for typos, log lines, renames — anything whose diff you could describe in one sentence.</p>
+<p>Plan when you're unsure of the approach, when the change spans files, or when you don't know the code. That's a judgement call, not a ritual.</p>
+
+<h2>3. Course-correct early — and know when to quit</h2>
+<table class="doc">
+<thead><tr><th>Key</th><th>Does</th></tr></thead>
+<tbody>
+<tr><td><code>Esc</code></td><td>Stop mid-action. Context is kept, so you can redirect.</td></tr>
+<tr><td><code>Esc Esc</code> / <code>/rewind</code></td><td>Restore earlier code and/or conversation.</td></tr>
+<tr><td><code>/clear</code></td><td>Reset. Keeps project memory.</td></tr>
+</tbody>
+</table>
+
+<div class="callout tip">
+  <div class="c-head">💡 The two-correction rule</div>
+  <p>Straight from Anthropic: if you've corrected Claude <b>more than twice on the same issue</b>, the context is now polluted with failed approaches. <code>/clear</code> and write a better prompt using what you just learned. "A clean session with a better prompt almost always outperforms a long session with accumulated corrections."</p>
+  <p>This is the highest-value habit on this page. The instinct to explain <i>one more time</i> is almost always wrong.</p>
+</div>
+
+<h2>4. Spend context deliberately</h2>
+<ul>
+  <li><b><code>/clear</code> between unrelated tasks.</b> The cheapest thing you can do.</li>
+  <li><b><code>/compact focus on the auth bug</code></b> — steering compaction beats letting it guess.</li>
+  <li><b><code>/btw</code></b> for side questions. The answer appears in an overlay and <b>never enters conversation history</b>. Badly underused.</li>
+  <li><b><code>/context</code></b> to see what's actually eating the window.</li>
+  <li><b>Delegate big reads to <span class="jargon" data-term="subagent">subagents</span></b> — the single highest-leverage context move. See <a href="#scaling">6.4</a>.</li>
+  <li><b>Tell compaction what to keep</b>, in CLAUDE.md: <i>"When compacting, always preserve the list of modified files and the test commands."</i></li>
+</ul>
+
+<div class="callout warn">
+  <div class="c-head">⚠️ Checkpoints don't track bash</div>
+  <p><code>/rewind</code> restores files Claude edited. It does <b>not</b> undo what a shell command did — if Claude ran <code>rm</code> or <code>mv</code>, rewind can't help. Git is your durable history; <code>/rewind</code> is within-session undo. Don't confuse them.</p>
+</div>
+
+<h2>What the data says separates people</h2>
+<p>Anthropic analysed ~400,000 sessions across ~235,000 users. Experts trigger about <b>12 actions per prompt versus a novice's 5</b>, and get ~3,200 words back versus ~600. Verified success runs <b>15% for novices against 28–33% for experienced users</b>; when a problem appears, novices abandon 19% of the time versus 5–7%.</p>
+
+<div class="callout tip">
+  <div class="c-head">💡 The finding that should encourage you</div>
+  <p><b>Domain expertise — not coding background — predicts success.</b> "Success depends on what the user brings." Your fifteen years of knowing what breaks in a Salesforce org <i>is</i> the differentiator. Claude supplies throughput; you supply the judgement about what "correct" means here.</p>
+  <p>The other useful number: the novice→intermediate gap is <b>bigger</b> than the intermediate→expert gap. The habits on this page are where the returns are.</p>
+</div>
+
+<div class="sources">
+  <h3>Official sources</h3>
+  <ul>
+    <li><a href="https://code.claude.com/docs/en/best-practices">Best practices</a> — verification, the four gating tiers, the two-correction rule</li>
+    <li><a href="https://www.anthropic.com/research/claude-code-expertise">How Claude Code is used in practice</a> — the 400k-session study</li>
+    <li><a href="https://code.claude.com/docs/en/checkpointing">Checkpointing</a> · <a href="https://code.claude.com/docs/en/goal">/goal</a></li>
+    <li><a href="https://code.claude.com/docs/en/interactive-mode">Interactive mode</a> — /btw and side questions</li>
+    <li><a href="https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents">Effective context engineering</a></li>
+  </ul>
+</div>
+`
+      },
+
+      {
+        id: "scaling",
+        num: "6.4",
+        title: "Scaling, and where it breaks",
+        html: `
+${VERIFIED}
+<p class="lead">Five Claude sessions running at once sounds like five times the output. In practice most people who try it quietly go back to two.</p>
+
+<p>Parallelism works — but only for a specific shape of work, and the ceiling is lower than the marketing suggests. This page is the honest version.</p>
+
+<h2>Subagents are researchers, not coders</h2>
+<p>The most durable insight in this whole area: <b>read-heavy work parallelises; write-heavy work doesn't.</b></p>
+<p>Three <span class="jargon" data-term="subagent">subagents</span> searching a codebase can't corrupt each other — conflicting reads are harmless. Three subagents <i>editing</i>, each unaware of the others' decisions, produce incompatible work that you then have to reconcile.</p>
+
+<div class="callout tip">
+  <div class="c-head">💡 Anthropic's own product design concedes this</div>
+  <p>Of the three built-in subagents, <b>two are read-only</b>: <code>Explore</code> and <code>Plan</code>. Only <code>General-purpose</code> writes. That split isn't an accident.</p>
+</div>
+
+<p>So the reliable use is investigation: <i>"use subagents to find every place we reference this field."</i> They burn their context on the search and hand back the answer. Your window stays clean for the actual work.</p>
+
+<h2>The number is three to five</h2>
+<p>Anthropic put it well: <b>"Three focused teammates often outperform five scattered ones."</b> Independent practitioner reports converge on the same 3–5 range. Treat larger claims as outliers, not targets.</p>
+
+<h2>Worktrees fix files, not infrastructure</h2>
+<p><span class="jargon" data-term="worktree">Worktrees</span> are native — <code>claude --worktree</code> or <code>-w</code> — and they genuinely solve file collisions between parallel sessions.</p>
+
+<div class="callout warn">
+  <div class="c-head">⚠️ They do not solve the thing that actually breaks</div>
+  <p>Ports. Databases. <b>Migrations.</b> Test data. Caches. Two worktrees share one org and one database — if session A runs a migration, session B breaks. Every real failure report about parallel sessions lives in that gap, and nothing has closed it.</p>
+  <p>The practical split: worktrees are near-free for <b>stateless</b> work (libraries, pure logic, docs) and genuinely painful for <b>stateful</b> app development. That difference explains almost all the disagreement you'll read.</p>
+</div>
+
+<p>For Salesforce this matters more than most stacks: your sandbox is shared state. Two sessions deploying to the same org is not parallelism, it's a race.</p>
+
+<h2>The real bottleneck is you</h2>
+<p>The most consistent report from people who've pushed parallelism hard is not that Claude fails. It's that <b>they run out of review capacity</b>. One well-known practitioner describes being wiped out for the day by 11am running four agents.</p>
+<p>And reviewing code you didn't ask for is harder than reviewing your own work — you must first reconstruct what the author was trying to do, then judge whether they did it. Four agents produce four of those.</p>
+
+<div class="callout tip">
+  <div class="c-head">💡 The honest reframe</div>
+  <p>Parallelism doesn't make you faster at your job. It <b>changes your job</b>, from author to editor. Some people find that a better use of their expertise; plenty find it exhausting. It's worth knowing which you are before you build a workflow around it.</p>
+  <p>And note the asymmetry: this is a <b>multiplier on existing discipline</b>, not a substitute for it. Every credible success story is gated on something — a real test suite, written architecture, clean decomposition. That's why it works for the people writing the blog posts and fails for the people reading them.</p>
+</div>
+
+<h2>The adversarial review step</h2>
+<p>Before calling long unattended work done, have a subagent review the diff in fresh context. It sees the change and your criteria, not the reasoning that produced it, so it judges the result on its own terms. <code>/code-review</code> does exactly this.</p>
+
+<div class="callout warn">
+  <div class="c-head">⚠️ The reviewer trap</div>
+  <p>Anthropic's own caveat, and it's underrated: <b>"A reviewer prompted to find gaps will usually report some, even when the work is sound, because that is what it was asked to do."</b> Chasing every finding produces extra abstraction, defensive code, and tests for cases that can't happen.</p>
+  <p>Tell the reviewer to flag only what affects correctness or the stated requirements. Treat the rest as optional.</p>
+</div>
+
+<h2>Before you reach for a third-party orchestrator</h2>
+<p>A generation of tools existed to bolt parallelism onto Claude Code. Anthropic then shipped <code>--worktree</code>, background subagents, the agent view, agent teams, and dynamic workflows — first-party and free. Several of the best-known orchestrators are now abandoned or de-invested.</p>
+<p><b>Try the built-ins first.</b> Check a tool's last commit date and actual download numbers before adopting it; star counts in this space are badly disconnected from use.</p>
+
+<div class="sources">
+  <h3>Official sources</h3>
+  <ul>
+    <li><a href="https://code.claude.com/docs/en/sub-agents">Subagents</a> — the built-in read-only Explore and Plan</li>
+    <li><a href="https://code.claude.com/docs/en/worktrees">Worktrees</a> — the --worktree flag</li>
+    <li><a href="https://code.claude.com/docs/en/best-practices">Best practices</a> — adversarial review and the reviewer caveat</li>
+    <li><a href="https://code.claude.com/docs/en/agent-teams">Agent teams</a> · <a href="https://code.claude.com/docs/en/workflows">Dynamic workflows</a></li>
+    <li><a href="https://www.anthropic.com/engineering/building-c-compiler">Building a C compiler with Claude</a> — 16 parallel instances, and an honest account of what broke</li>
+  </ul>
+</div>
+`
+      },
+
+      {
+        id: "salesforce-setup",
+        num: "6.5",
+        title: "Your Salesforce setup",
+        html: `
+${VERIFIED}
+<p class="lead">There is official, actively-maintained Salesforce tooling for Claude — and almost nobody writes about it. If you set up one thing this week, make it this.</p>
+
+<h2>Two things exist, both official</h2>
+<table class="doc">
+<thead><tr><th>What</th><th>Gives you</th></tr></thead>
+<tbody>
+<tr>
+  <td><b><code>forcedotcom/sf-skills</code></b><br><small>Salesforce, Apache-2.0</small></td>
+  <td>60+ <span class="jargon" data-term="skill">skills</span> for Apex, LWC, test generation, log debugging. Built for Agentforce Vibes, explicitly compatible with Claude Code. Install with <code>npx skills add forcedotcom/sf-skills</code>.</td>
+</tr>
+<tr>
+  <td><b><code>salesforcecli/mcp</code></b><br><small>Salesforce, Apache-2.0</small></td>
+  <td>The DX <span class="jargon" data-term="mcp">MCP</span> Server. 15 toolsets, 60+ tools. Runs <b>locally</b> against your SF CLI credentials — metadata, deploy, tests, org queries.</td>
+</tr>
+</tbody>
+</table>
+
+<p>Both are shipping weekly as of July 2026. This is the answer to the placeholder in <a href="#recipe-impact">recipe 5.2</a>.</p>
+
+<div class="callout warn">
+  <div class="c-head">⚠️ Two different Salesforce MCP products, constantly confused</div>
+  <p><b>DX MCP</b> (<code>salesforcecli/mcp</code>) runs on <b>your machine</b>, against your CLI credentials, for <b>development</b> — metadata, deploys, tests.</p>
+  <p><b>Hosted MCP</b> is Salesforce-hosted, for <b>org data and actions</b> — Platform, Data 360, Tableau, MuleSoft.</p>
+  <p>Most blog posts blur them. They have different trust models and different use cases. For Claude Code in a repo, you almost always want the local DX one.</p>
+</div>
+
+<h3>The flag that matters</h3>
+<p>DX MCP <b>requires <code>--orgs</code></b> — you must explicitly name which orgs the model may touch. That is a good default and worth respecting rather than working around. Non-GA tools sit behind <code>--allow-non-ga-tools</code>; leave that off unless you mean it.</p>
+
+<div class="callout warn">
+  <div class="c-head">⚠️ sf-skills has no stability guarantee</div>
+  <p>Salesforce's own warning: "Expect frequent changes. Skills may be renamed, restructured, or removed between releases." It is explicitly <b>not</b> under GA API stability guarantees. Don't hard-code skill names into your own tooling, and re-check after upgrades.</p>
+</div>
+
+<h2>The honest picture of quality</h2>
+<p>A Salesforce Developer Advocate put it better than any vendor blog:</p>
+<blockquote><p><i>"You move from 60% correct to 95% correct — a massive improvement — but the remaining 5% is why validators exist."</i></p></blockquote>
+<p>And the sharpest framing of why Apex is harder than it looks: models already know Apex, LWC, and SOQL <i>as languages</i>. But knowing a language and consistently producing code that respects your org's constraints are different problems.</p>
+
+<p>The one independent field report worth knowing — an admin building Flows — found that <b>without refined CLAUDE.md guidance, Claude produced XML that wasn't valid and failed deployment</b>. That directly contradicts "production-ready" vendor framing, and it validates the <a href="#four-layers">configure-first</a> approach: the file isn't a nicety here, it's what makes output deployable.</p>
+
+<h2>What nobody has actually measured</h2>
+<div class="callout tip">
+  <div class="c-head">💡 The most useful thing on this page</div>
+  <p>There is <b>no published independent evaluation</b> of three things you care most about:</p>
+  <ul>
+    <li><b>LWC Jest test quality</b> — are the tests meaningful?</li>
+    <li><b>Apex test <i>assertion</i> quality</b> — does it prove behaviour, or pad line coverage?</li>
+    <li><b>Governor limits in practice</b> — every source <i>asserts</i> Claude respects them; not one shows a failure case.</li>
+  </ul>
+  <p>Every source asserts; none demonstrates. Treat generated tests as drafts to review, not as coverage you've earned.</p>
+</div>
+
+<h2>Claims to distrust</h2>
+<p>The Salesforce-plus-AI content farm is unusually bad. Specifically:</p>
+<ul>
+  <li><b>"85% of Claude's Apex compiles first try vs ChatGPT's 60%"</b> — repeated verbatim across vendor blogs with <b>no primary source</b>. Fabricated.</li>
+  <li><b>"Automatically achieves 75%+ coverage"</b> — cited as a quality claim. <b>75% is the Salesforce deployment floor</b>, and Salesforce's own guidance says the focus "should not be on the percentage of code covered." Anyone quoting it as an achievement is telling you they don't do this for a living.</li>
+  <li><b>"MCP is read-only for Salesforce"</b> — plainly wrong. DX MCP ships deploy, write-apex-class, run-tests, and bulk DML.</li>
+  <li><b>"40–60% faster", "2–3x faster Flow builds"</b> — vendor self-benchmarks, no methodology.</li>
+</ul>
+
+<h2>Why it feels like nobody does this</h2>
+<p>Because they don't blog about it. Salesforce development is a closed-shop professional ecosystem — practice circulates in Trailblazer groups and consultancy Slacks, not Hacker News. There is real usage and there are real user-group demos; there is no observable public consensus.</p>
+<p>Which means: <b>there's no established playbook for you to copy.</b> The recipes in <a href="#recipe-lwc">Part 5</a> are a starting point, and your own <code>.claude/rules/</code> will be worth more than anything you find online.</p>
+
+<div class="sources">
+  <h3>Official sources</h3>
+  <ul>
+    <li><a href="https://github.com/forcedotcom/sf-skills">forcedotcom/sf-skills</a> — Salesforce's official skills collection (Apache-2.0)</li>
+    <li><a href="https://github.com/salesforcecli/mcp">salesforcecli/mcp</a> — the official DX MCP Server (Apache-2.0)</li>
+    <li><a href="https://code.claude.com/docs/en/mcp">MCP in Claude Code</a> — adding and scoping servers</li>
+    <li><a href="https://code.claude.com/docs/en/skills">Skills</a></li>
+  </ul>
+  <p><small>Salesforce tooling is cited from Salesforce's own repositories — the first-party source for those products, the same principle as citing Anthropic for Claude.</small></p>
+</div>
+`
+      },
+
+      {
+        id: "wastes-time",
+        num: "6.6",
+        title: "What wastes your time",
+        html: `
+${VERIFIED}
+<p class="lead">Claude felt sharp in February and dumb in April. You weren't imagining it — and the reason is more interesting than "they nerfed the model."</p>
+
+<h2>The degradation was real, and it wasn't the model</h2>
+<p>Anthropic published a postmortem on 23 April 2026 confirming genuine degradation from <b>4 March to 20 April</b> across Claude Code, the Agent SDK, and Cowork. Three separate bugs:</p>
+
+<table class="doc">
+<thead><tr><th>Cause</th><th>Fixed</th></tr></thead>
+<tbody>
+<tr><td>Default reasoning <span class="jargon" data-term="effort">effort</span> switched <b>high → medium</b> to reduce UI freezing. Anthropic: "the wrong tradeoff."</td><td>7 Apr</td></tr>
+<tr><td>A <b>caching bug</b> cleared thinking history <i>every turn</i> instead of once — Claude appeared forgetful and repetitive, and it burned usage faster.</td><td>10 Apr</td></tr>
+<tr><td>A system prompt capped commentary at 25 words — a measured <b>3% intelligence drop</b>.</td><td>20 Apr</td></tr>
+</tbody>
+</table>
+
+<div class="callout tip">
+  <div class="c-head">💡 Why this story is worth knowing</div>
+  <p>The community was <b>right about the symptom and wrong about the mechanism</b>. The theories were "they quantized it" and "they nerfed it to save compute." All three bugs were in the <b>harness</b>, not the model — Anthropic confirmed the API and inference layer were unaffected.</p>
+  <p>The lesson isn't "trust the vendor." It's that <b>"it feels worse" is real data worth reporting</b>, and that your explanation for it is probably wrong. Anthropic's own evals initially failed to reproduce it.</p>
+</div>
+
+<h2>The five failure patterns</h2>
+<p>Anthropic names these directly. All five are recognisable within a day of using the tool:</p>
+<table class="doc">
+<thead><tr><th>Pattern</th><th>Fix</th></tr></thead>
+<tbody>
+<tr><td><b>The kitchen sink session.</b> One task, then something unrelated, then back. Context full of noise.</td><td><code>/clear</code> between unrelated tasks</td></tr>
+<tr><td><b>Correcting over and over.</b> Context polluted with failed approaches.</td><td>After two failures, <code>/clear</code> and rewrite the prompt</td></tr>
+<tr><td><b>The over-specified CLAUDE.md.</b> Too long, so rules get lost in noise.</td><td>Prune. Convert to a <span class="jargon" data-term="hook">hook</span>. See <a href="#claude-md-ignored">6.2</a></td></tr>
+<tr><td><b>The trust-then-verify gap.</b> Plausible code that fails edge cases.</td><td>"If you can't verify it, don't ship it"</td></tr>
+<tr><td><b>The infinite exploration.</b> "Investigate X" unscoped; hundreds of files read.</td><td>Scope it, or use a <span class="jargon" data-term="subagent">subagent</span></td></tr>
+</tbody>
+</table>
+
+<h2>The stale-advice tax</h2>
+<p>Tips still circulating that do nothing. Each one costs you nothing but confidence — which is the expensive kind of nothing:</p>
+<table class="doc">
+<thead><tr><th>Still repeated</th><th>Reality</th></tr></thead>
+<tbody>
+<tr><td><b>"say <i>think hard</i> / <i>think harder</i>"</b></td><td>Not recognised. Passed through as ordinary text. Use <code>/effort</code>.</td></tr>
+<tr><td><b><code>MAX_THINKING_TOKENS=8000</code></b></td><td>Ignored by every adaptive-thinking model.</td></tr>
+<tr><td><b>"<code>@imports</code> save context"</b></td><td>False. Imports load at launch. Use <code>.claude/rules/</code> with a <code>paths</code> glob.</td></tr>
+<tr><td><b>"exit 1 to block a hook"</b></td><td><b>Exit 2 blocks.</b> Exit 1 is non-blocking — your guard silently <b>fails open</b>.</td></tr>
+<tr><td><b>"disable MCP servers to save context"</b></td><td>Mostly obsolete — tool schemas are deferred now. Only names load.</td></tr>
+<tr><td><b>"12 hook events"</b></td><td>~30. Any guide saying 12 or 13 is years behind.</td></tr>
+</tbody>
+</table>
+
+<div class="callout warn">
+  <div class="c-head">⚠️ The exit-1 one can actually hurt you</div>
+  <p>A hook meant to block dangerous commands, written with <code>exit 1</code>, does not block. It logs and the action proceeds. Unix convention makes <code>exit 1</code> the natural choice, so this is easy to get wrong — and a guard that fails open is worse than no guard, because you stopped watching.</p>
+</div>
+
+<h2>Money and limits</h2>
+<ul>
+  <li><b>Anthropic publishes no numeric limits.</b> Max 5× means "5× Pro", not a number. <b>Every specific figure you read in a blog is reverse-engineered or invented.</b> Distrust "~900 prompts per window" and similar.</li>
+  <li><b><code>/status</code> before you start.</b> The real cause of bill shock isn't heavy use — it's silent billing-owner switching, where a stray env var flips you from subscription to API billing.</li>
+  <li><b><code>/usage-credits</code></b> lets you set a <b>monthly spend cap</b> in the CLI. This is the actual answer to "how do I stop this costing more than I meant" and almost nobody mentions it.</li>
+  <li><b><code>/usage</code></b> attributes spend to skills, subagents, plugins, and individual MCP servers.</li>
+</ul>
+
+<div class="callout warn">
+  <div class="c-head">⚠️ Switching model does not restore a spent limit</div>
+  <p>Widely-repeated bad advice. Session and weekly windows are <b>shared across models</b> — <code>/model sonnet</code> won't buy you more room after you've hit your weekly cap. It only helps against a <i>model-specific</i> Opus limit.</p>
+</div>
+
+<p>Worth knowing: <span class="jargon" data-term="opusplan">opusplan</span> — Opus plans, Sonnet implements — buys most of the judgement at much of the saving.</p>
+
+<h2>Develop your intuition</h2>
+<p>Anthropic close their best-practices page with something unusually honest, and it's the right note to end on:</p>
+<blockquote><p><i>"Sometimes you should let context accumulate because you're deep in one complex problem. Sometimes you should skip planning because the task is exploratory. Sometimes a vague prompt is exactly right because you want to see how Claude interprets the problem before constraining it."</i></p></blockquote>
+<p>Everything in Part 6 is a starting point, not a law. Notice what works. When output is great, notice what you did — the prompt, the context, the mode. When it struggles, ask whether the context was noisy, the prompt vague, or the task too big for one pass.</p>
+<p>That intuition is the actual skill. <span class="jargon" data-term="agentic-engineering">Agentic engineering</span> is not about knowing the flags.</p>
+
+<div class="sources">
+  <h3>Official sources</h3>
+  <ul>
+    <li><a href="https://www.anthropic.com/engineering/april-23-postmortem">April 23 postmortem</a> — the three harness bugs, in Anthropic's own words</li>
+    <li><a href="https://code.claude.com/docs/en/best-practices">Best practices</a> — the five failure patterns, "develop your intuition"</li>
+    <li><a href="https://code.claude.com/docs/en/hooks-guide">Hooks guide</a> — exit codes; exit 2 blocks</li>
+    <li><a href="https://code.claude.com/docs/en/memory">Memory</a> — imports load at launch</li>
+    <li><a href="https://support.claude.com/en/articles/9797557-usage-limit-best-practices">Usage limit best practices</a> · <a href="https://support.claude.com/en/articles/12429409-manage-usage-credits-for-paid-claude-plans">Manage usage credits</a></li>
+    <li><a href="https://code.claude.com/docs/en/costs">Costs</a></li>
   </ul>
 </div>
 `
