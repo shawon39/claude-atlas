@@ -57,7 +57,10 @@ Push to `main`. Pages is set to deploy from the branch root — no build, no Act
 | Part 2 · Claude Code | Complete |
 | Part 3 · Desktop & Cowork | Complete |
 | Part 4 · claude.ai | Complete |
-| Part 5 · Recipes | Planned |
+| Part 5 · Recipes | Complete |
 
-Facts are verified against official docs on the date shown on each page. Sweep the
-[release notes](https://support.claude.com/en/articles/12138966-release-notes) monthly.
+All sections written. Ongoing job is the monthly sweep — see
+[5.4 · Staying current](https://shawon39.github.io/claude-atlas/#staying-current) for the routine and
+the list of known expiry dates.
+
+Facts are verified against official docs on the date shown on each page.

@@ -75,8 +75,12 @@ These are not style preferences. They are what keeps the site true and maintaina
 
 ## Gotchas
 
-- `content.js` uses template literals. A literal `${` in prose will interpolate — escape it. Backticks
-  in content must be escaped too.
+- `content.js` uses template literals, so two characters bite:
+  - **Backticks** — a markdown backtick inside `html:` terminates the string. Use `<code>` tags in
+    prose; inside a `<pre>` showing markdown, escape as `` \` ``.
+  - **`${`** — interpolates. GitHub Actions `${{ secrets.X }}` **must** be written `\${{ secrets.X }}`
+    or the page silently breaks. Same for any `${...}` you want shown literally.
+  - `node --check assets/content.js` catches both. Run it before every push.
 - Mermaid inside `content.js` is a JS string, not HTML, so write `-->` normally (**not** `--&gt;`).
 - Every `data-term` slug must exist in `GLOSSARY` or the tooltip silently does nothing.
 - Bump the `?v=` query on the script/style tags in `index.html` when you want to bust caches.

@@ -2076,6 +2076,424 @@ ${VERIFIED}
     ]
   },
 
+  /* ============================ PART 5 ============================ */
+  {
+    part: "Part 5 · Recipes",
+    pages: [
+      {
+        id: "recipe-lwc",
+        num: "5.1",
+        title: "Ship an LWC feature",
+        html: `
+${VERIFIED}
+<p class="lead">"Build a datatable LWC that shows Opportunities with server-side pagination, sortable columns, and an inline owner filter." Four files, an Apex controller, and a test class. Where do you start?</p>
+
+<p>Not by typing that prompt and hoping. This recipe is the shape of a session that reliably lands: <b>set up once, plan first, implement in a tighter mode, verify with your own tools.</b></p>
+
+<h2>Setup: a CLAUDE.md that earns its place</h2>
+<p>Written once, in the repo root. Commands and conventions only — the things a new hire asks on day one.</p>
+
+<pre><code># RocketPhone SFDX
+
+## Commands
+- Deploy to sandbox: sf project deploy start --target-org dev
+- Dry run first: sf project deploy start --dry-run --target-org dev
+- Apex tests: sf apex run test --target-org dev --wait 10
+- LWC tests: npm run test:unit
+
+## Conventions
+- LWC lives in force-app/main/default/lwc
+- Apex controllers are @AuraEnabled(cacheable=true) unless they mutate
+- Every Apex method gets a test with meaningful asserts, not just coverage
+- Never commit .env or org credentials</code></pre>
+
+<p>Apex-specific guidance does <i>not</i> go here — it goes in a scoped rule, so it costs nothing until Claude opens an Apex file:</p>
+
+<pre><code>---
+paths:
+  - "force-app/**/*.cls"
+  - "force-app/**/*.trigger"
+---
+
+- Bulkify everything. No SOQL or DML inside loops.
+- Query only the fields you use.
+- Respect sharing: "with sharing" unless there is a documented reason not to.</code></pre>
+
+<p>That is <a href="#memory-rules">2.5</a> in practice: always-true things in <code>CLAUDE.md</code>, file-specific things in <code>.claude/rules/</code>.</p>
+
+<h2>The session</h2>
+<div class="mermaid">
+sequenceDiagram
+    participant You
+    participant C as Claude Code
+    participant SF as sf CLI / org
+    You->>C: Shift+Tab → plan mode, then the request
+    C->>C: Reads existing LWCs, the object model
+    C-->>You: A plan: 4 files, controller, tests
+    You->>C: Corrects one assumption, approves
+    Note over C: Shift+Tab → acceptEdits
+    C->>C: Writes component + Apex + tests
+    C->>SF: sf apex run test
+    SF-->>C: 1 failure
+    C->>C: Fixes, re-runs
+    SF-->>C: Pass
+    C-->>You: Done — review the diff
+</div>
+<p class="diagram-caption">The correction happens against a plan, not against nine written files.</p>
+
+<h3>1. Plan mode, always</h3>
+<p><b>Shift+Tab</b> into <span class="jargon" data-term="plan-mode">plan mode</span>, then describe the feature. Claude explores your existing components and object model without touching anything, then proposes.</p>
+<p>This is where you catch "it's going to build a new Apex controller when <code>OpportunityListController</code> already does 80% of this." Thirty seconds of reading versus an afternoon of reviewing.</p>
+
+<div class="callout tip">
+  <div class="c-head">💡 The plan is the cheapest place to be wrong</div>
+  <p>A wrong plan costs one paragraph of correction. A wrong implementation costs a diff review, a rollback, and the context you both burned getting there.</p>
+</div>
+
+<h3>2. Approve into acceptEdits</h3>
+<p>When you approve a plan, pick the mode it continues in. <code>acceptEdits</code> is the sweet spot for this work: Claude writes files without prompting on each one, but you are still in the loop for anything beyond the filesystem.</p>
+
+<h3>3. Let it run your tests</h3>
+<p>Because <code>CLAUDE.md</code> names the commands, Claude runs <code>sf apex run test</code> and <code>npm run test:unit</code> itself, reads the failures, and fixes them. This is the part that feels like magic and is really just "you told it how."</p>
+
+<h3>4. Review before you commit</h3>
+<p><code>/code-review</code> reads the diff for bugs and cleanups. It is not a substitute for your eyes — it is a first pass that catches the boring things so your review can be about the design.</p>
+
+<h2>When it goes sideways</h2>
+<p>Claude misunderstands the object model and starts fixing symptoms. You explain again. It half-fixes. You explain again.</p>
+<p><b>Stop.</b> <code>/rewind</code> the code back and keep the conversation — Claude keeps what it learned without the broken files. Or <code>/clear</code> and start over with a prompt containing what you just learned. As <a href="#how-claude-thinks">0.3</a> argues: you are fighting a cluttered <span class="jargon" data-term="context-window">context window</span>, not a stupid model.</p>
+
+<h2>What to steal</h2>
+<ul>
+  <li><b>Commands in CLAUDE.md.</b> Everything else follows from Claude being able to run your tests.</li>
+  <li><b>Apex rules in <code>.claude/rules/</code> with a paths glob</b>, not in CLAUDE.md.</li>
+  <li><b>Plan mode for anything multi-file.</b> Non-negotiable.</li>
+  <li><b>Sonnet 5 for this.</b> Patterned work — save Opus for the hard debugging. See <a href="#choosing">1.2</a>.</li>
+</ul>
+
+<div class="sources">
+  <h3>Official sources</h3>
+  <ul>
+    <li><a href="https://code.claude.com/docs/en/permission-modes">Permission modes</a> — plan mode, acceptEdits</li>
+    <li><a href="https://code.claude.com/docs/en/memory">Memory</a> — CLAUDE.md and rules with paths globs</li>
+    <li><a href="https://code.claude.com/docs/en/checkpointing">Checkpointing</a> — /rewind</li>
+    <li><a href="https://code.claude.com/docs/en/commands">Slash commands</a> — /code-review</li>
+  </ul>
+</div>
+`
+      },
+
+      {
+        id: "recipe-impact",
+        num: "5.2",
+        title: "Apex impact analysis",
+        html: `
+${VERIFIED}
+<p class="lead">Someone asks you to rename a picklist value on a managed-package object. You know the answer is "it depends" and you know finding out takes two hours of clicking through Setup.</p>
+
+<p>This recipe teaches Claude to do that scan — and the interesting part is that it needs <b>two</b> things your repo alone cannot give it: a written-down checklist, and live access to the org.</p>
+
+<h2>Why the repo isn't enough</h2>
+<p>Your repo knows about Apex, LWC, and metadata you've retrieved. It does not know which Reports filter on that value, which Flows branch on it, whether a subscriber org depends on it, or whether any records actually use it. That lives in the org.</p>
+
+<div class="mermaid">
+flowchart TD
+    A["Proposed change:<br/>rename a picklist value"] --> B["Skill: the checklist"]
+    B --> C["Repo scan<br/>grep Apex · LWC · metadata"]
+    B --> D["Org scan via MCP<br/>Flows · Reports · dependencies"]
+    C --> E["Risk report"]
+    D --> E
+    E --> F{"Managed package<br/>one-way door?"}
+    F -- Yes --> G["Stop. Escalate."]
+    F -- No --> H["Proceed with a plan"]
+</div>
+<p class="diagram-caption">Two sources, one report. Neither half is sufficient alone.</p>
+
+<h2>Part 1 — the checklist as a skill</h2>
+<p>Put your expertise where Claude can load it on demand. <code>.claude/skills/impact-analysis/SKILL.md</code>:</p>
+
+<pre><code>---
+name: impact-analysis
+description: Assess the blast radius of a Salesforce metadata change (field, picklist value, Apex method, LWC @api property) before it ships. Use whenever someone proposes renaming, deleting, or changing the type of existing metadata.
+---
+
+Work through all of these. Report findings even when uncertain — a false
+positive costs a minute; a missed dependency costs a release.
+
+## In the repo
+1. grep Apex, triggers, LWC, Aura for the API name and the literal value
+2. Check test classes that assert on it
+3. Check custom metadata and static resources
+
+## In the org (requires the Salesforce MCP server)
+4. Query dependencies via the Tooling API
+5. Flows and Process Builders that reference it
+6. Reports and list views that filter on it
+7. Validation rules and formula fields
+8. Whether records actually use the value
+
+## One-way doors — stop and escalate
+- Anything in a managed package that subscribers depend on
+- Field type changes with existing data
+- API-name changes on anything integrated externally
+
+## Output
+A table: what references it, where, and how it breaks. Then a verdict:
+safe / needs migration / do not do this.</code></pre>
+
+<div class="callout tip">
+  <div class="c-head">💡 The description is the trigger</div>
+  <p>That long <code>description</code> is doing real work — it is the only part in <span class="jargon" data-term="context-window">context</span> until the skill fires. "Impact analysis stuff" would never trigger. Naming the situations ("renaming, deleting, or changing the type") makes it fire exactly when it should. See <a href="#skills-commands">2.6</a>.</p>
+</div>
+
+<h2>Part 2 — the org, via MCP</h2>
+<p>A Salesforce <span class="jargon" data-term="mcp">MCP</span> server gives Claude tools to query your org: run SOQL, describe objects, read metadata, check dependencies. Add it scoped to the project:</p>
+
+<pre><code>claude mcp add salesforce --transport stdio -- &lt;your-salesforce-mcp-server&gt;</code></pre>
+
+<p>Which server you use is your choice — the pattern is what matters. Once connected, <code>/mcp</code> shows its status and what it costs you in context.</p>
+
+<div class="callout warn">
+  <div class="c-head">⚠️ Point it at a sandbox</div>
+  <p>An MCP server runs with your credentials and can act on your org. For read-only analysis this is safe enough, but the same connection that runs a SELECT can run a DELETE if a tool exposes one. Authenticate against a sandbox, and reach for <code>dontAsk</code> or explicit <code>allowedTools</code> if you want a hard floor under it. See <a href="#mcp">2.9</a>.</p>
+</div>
+
+<h2>Running it</h2>
+<p>"I need to rename the <code>Status__c</code> picklist value 'Pending' to 'Awaiting Review'. What breaks?"</p>
+<p>Claude loads the skill because your description matched, greps the repo, queries the org through MCP, and returns the table. Use <b>Opus 4.8</b> here — this is diagnostic reasoning across sparse evidence, exactly the work it is best at.</p>
+
+<div class="callout warn">
+  <div class="c-head">⚠️ This is a first pass, not a sign-off</div>
+  <p>A dependency scan finds what it can see. Dynamic SOQL built from strings, an integration referencing the API name from outside your org, a hardcoded value in a Flow someone built last year — Claude will miss things a scan cannot reach. Treat the output as a strong starting list, not a guarantee. The verdict is still yours.</p>
+</div>
+
+<h2>What to steal</h2>
+<ul>
+  <li><b>Encode the checklist you already run.</b> A skill is your expertise, written once.</li>
+  <li><b>Repo + org together.</b> Either alone gives a confidently incomplete answer.</li>
+  <li><b>Name the one-way doors explicitly.</b> Managed-package breakage is the one that ends careers.</li>
+  <li><b>Ask for uncertain findings.</b> Tell it to report low-confidence hits — you filter, it shouldn't.</li>
+</ul>
+
+<div class="sources">
+  <h3>Official sources</h3>
+  <ul>
+    <li><a href="https://code.claude.com/docs/en/skills">Skills</a> — SKILL.md and the description-as-trigger</li>
+    <li><a href="https://code.claude.com/docs/en/mcp">MCP in Claude Code</a> — adding servers, scopes, /mcp</li>
+    <li><a href="https://platform.claude.com/docs/en/about-claude/models/choosing-a-model">Choosing a model</a></li>
+    <li><a href="https://code.claude.com/docs/en/permissions">Permissions</a> — allowedTools</li>
+  </ul>
+</div>
+`
+      },
+
+      {
+        id: "recipe-ci",
+        num: "5.3",
+        title: "PR review in CI",
+        html: `
+${VERIFIED}
+<p class="lead">Every PR should get checked for SOQL in a loop, hardcoded IDs, and missing null guards before a human spends attention on it. PMD catches some of it. The rest needs judgement.</p>
+
+<p>This recipe runs Claude Code <span class="jargon" data-term="headless">headless</span> in GitHub Actions and turns its output into a gate — pass or fail, with findings.</p>
+
+<div class="mermaid">
+flowchart LR
+    A["PR opened"] --> B["GitHub Action"]
+    B --> C["git diff"]
+    C --> D["claude -p --bare<br/>--json-schema"]
+    D --> E{"findings<br/>empty?"}
+    E -- Yes --> F["✓ check passes"]
+    E -- No --> G["Comment findings<br/>· fail the check"]
+</div>
+<p class="diagram-caption">The schema is what makes this a gate rather than a wall of prose.</p>
+
+<h2>1. A token</h2>
+<p><code>claude setup-token</code> mints a one-year OAuth token. Store it as a repo secret. Do not use your personal API key.</p>
+
+<h2>2. The schema — the load-bearing part</h2>
+<p>Without it you get an essay. With it you get something a pipeline can branch on.</p>
+
+<pre><code>{
+  "type": "object",
+  "properties": {
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "file":       { "type": "string" },
+          "line":       { "type": "integer" },
+          "severity":   { "type": "string", "enum": ["high", "medium", "low"] },
+          "rule":       { "type": "string" },
+          "why":        { "type": "string" }
+        },
+        "required": ["file", "line", "severity", "rule", "why"]
+      }
+    },
+    "verdict": { "type": "string", "enum": ["pass", "fail"] }
+  },
+  "required": ["findings", "verdict"]
+}</code></pre>
+
+<h2>3. The workflow</h2>
+<pre><code>name: Claude review
+on: pull_request
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+
+      - name: Install Claude Code
+        run: curl -fsSL https://claude.ai/install.sh | bash
+
+      - name: Review the diff
+        env:
+          CLAUDE_CODE_OAUTH_TOKEN: \${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+        run: |
+          git diff origin/\${{ github.base_ref }}...HEAD > /tmp/diff.patch
+          claude -p "Review the diff in /tmp/diff.patch against ci/review-rules.md.
+                     Report every finding, including uncertain ones." \\
+            --bare \\
+            --allowedTools "Read" \\
+            --permission-mode dontAsk \\
+            --json-schema ./ci/review-schema.json \\
+            --output-format json > /tmp/result.json
+
+      - name: Gate
+        run: |
+          jq -r '.structured_output.findings[] |
+                 "\\(.file):\\(.line) [\\(.severity)] \\(.rule) — \\(.why)"' /tmp/result.json
+          test "$(jq -r '.structured_output.verdict' /tmp/result.json)" = "pass"</code></pre>
+
+<div class="callout tip">
+  <div class="c-head">💡 --bare is what makes this reproducible</div>
+  <p>Without it, Claude Code discovers hooks, skills, plugins, MCP servers, and CLAUDE.md — so your pipeline's behaviour depends on whatever a developer last added locally. <code>--bare</code> skips all discovery; you load exactly what you list. See <a href="#headless-ci">2.10</a>.</p>
+</div>
+
+<h2>4. The rules file</h2>
+<p><code>ci/review-rules.md</code> holds the Salesforce-specific bar — SOQL and DML in loops, hardcoded IDs, missing null checks on SOQL results, <code>with sharing</code> omissions, tests that assert nothing. Keep it in the repo so it reviews in PRs like any other code.</p>
+
+<div class="callout warn">
+  <div class="c-head">⚠️ Tell it to report everything; filter afterwards</div>
+  <p>Ask for "only high-severity issues" and current models take you at your word — they find the bugs, judge them below your bar, and stay quiet. Measured recall drops even though bug-finding improved. Ask for every finding with a severity attached, then filter in <code>jq</code>. Filtering is a pipeline's job, not a judgement call you delegate.</p>
+</div>
+
+<div class="callout warn">
+  <div class="c-head">⚠️ A fork PR is code from a stranger</div>
+  <p>This job feeds untrusted content to an agent holding your token. <code>--allowedTools "Read"</code> and <code>dontAsk</code> are not paranoia — they are the floor. Never give a fork-triggered job write access, and prefer commenting over acting. Treat the diff as hostile input, because occasionally it is.</p>
+</div>
+
+<h2>What to steal</h2>
+<ul>
+  <li><b><code>--json-schema</code>.</b> The difference between a bot that talks and a check that gates.</li>
+  <li><b><code>--bare</code> everywhere automated.</b> Reproducibility is not optional in CI.</li>
+  <li><b>Rules in the repo</b>, reviewed like code.</li>
+  <li><b>Report-everything-filter-later.</b> Do not delegate the severity bar.</li>
+  <li><b>Minimum tools.</b> <code>Read</code> is usually all a reviewer needs.</li>
+</ul>
+
+<div class="sources">
+  <h3>Official sources</h3>
+  <ul>
+    <li><a href="https://code.claude.com/docs/en/headless">Headless mode</a> — -p, --bare, --json-schema, output formats</li>
+    <li><a href="https://code.claude.com/docs/en/github-actions">GitHub Actions</a> · <a href="https://code.claude.com/docs/en/gitlab-ci-cd">GitLab CI/CD</a></li>
+    <li><a href="https://code.claude.com/docs/en/authentication">Authentication</a> — claude setup-token</li>
+    <li><a href="https://code.claude.com/docs/en/permissions">Permissions</a> — allowedTools, dontAsk</li>
+  </ul>
+</div>
+`
+      },
+
+      {
+        id: "staying-current",
+        num: "5.4",
+        title: "Staying current",
+        html: `
+${VERIFIED}
+<p class="lead">Everything on this site has a shelf life. Three pages here carry dates that expire within a month of being written. That is not a flaw in the writing — it is the subject.</p>
+
+<p>In the twelve months to July 2026 Anthropic shipped a new model family, renamed an SDK, replaced how thinking is configured, retired six models, and launched a second product surface. Any static understanding of this ecosystem decays in weeks.</p>
+
+<h2>Three feeds, and only three</h2>
+<table class="doc">
+<thead><tr><th>Feed</th><th>Covers</th></tr></thead>
+<tbody>
+<tr><td><a href="https://support.claude.com/en/articles/12138966-release-notes">Release notes</a></td><td>claude.ai, Desktop, Cowork. <b>The single best one</b> if you read only one.</td></tr>
+<tr><td><a href="https://code.claude.com/docs/en/changelog">Claude Code changelog</a></td><td>The CLI. Moves fastest — versions ship most weeks.</td></tr>
+<tr><td><a href="https://platform.claude.com/docs/en/about-claude/model-deprecations">Model deprecations</a></td><td>The authoritative retirement table. The one that breaks code.</td></tr>
+</tbody>
+</table>
+
+<div class="callout tip">
+  <div class="c-head">💡 Skip the newsletters</div>
+  <p>Secondary coverage is where stale patterns come from — a post from March describing <code>budget_tokens</code> as current reads exactly like one from July. The three feeds above are primary sources and take fifteen minutes a month between them.</p>
+</div>
+
+<h2>The monthly sweep</h2>
+<p>Once a month, ~20 minutes:</p>
+<ol>
+  <li><b>Read the three feeds</b> since your last sweep.</li>
+  <li><b>Ask what changed for you</b> — not everything matters. A new Cowork plugin category is noise if you don't use Cowork.</li>
+  <li><b>Patch what's affected</b> and bump that page's verified date.</li>
+  <li><b>Check the expiry list</b> below.</li>
+</ol>
+
+<p>This is itself a Claude Code task. A skill holding the three URLs and the diff-what-changed instruction, on a <code>/loop</code> or a scheduled run, turns "I should keep up" into something that happens.</p>
+
+<h2>Known expiries</h2>
+<p>Dated things this site already knows are coming. When you read this, check them off:</p>
+<table class="doc">
+<thead><tr><th>Date</th><th>What</th><th>Affects</th></tr></thead>
+<tbody>
+<tr><td><b>21 Jul 2026</b></td><td><code>claude-mythos-preview</code> retires → <code>claude-mythos-5</code></td><td><a href="#lineup">1.1</a></td></tr>
+<tr><td><b>24 Jul 2026</b></td><td>Opus 4.7 fast mode <b>removed</b></td><td><a href="#thinking-effort">1.3</a></td></tr>
+<tr><td><b>3 Aug 2026</b></td><td>Claude in Slack → Claude Tag cutover</td><td><a href="#ecosystem-map">0.2</a>, <a href="#stale-patterns">1.4</a></td></tr>
+<tr><td><b>5 Aug 2026</b></td><td><code>claude-opus-4-1</code> <b>retires</b></td><td><a href="#stale-patterns">1.4</a></td></tr>
+<tr><td><b>31 Aug 2026</b></td><td>Sonnet 5 intro pricing ends ($2/$10 → $3/$15)</td><td><a href="#lineup">1.1</a></td></tr>
+</tbody>
+</table>
+
+<h2>What actually breaks you</h2>
+<p>Not missing a feature — you'll find it eventually. What costs you is <b>confidently using something that was removed</b>. The failure modes, in order of nastiness:</p>
+<ol>
+  <li><b>Silent degradation.</b> The worst. A retired <code>-fast</code> model string silently falls back to standard speed — no error, you just quietly lose what you thought you had.</li>
+  <li><b>A 400 in production.</b> <code>budget_tokens</code>, <code>temperature</code>, assistant prefill. Loud, at least.</li>
+  <li><b>A 404 on a retired model.</b> Loudest, easiest to fix.</li>
+</ol>
+<p><a href="#stale-patterns">1.4 · Stale patterns</a> is the running list. It is the page most worth re-reading after a sweep.</p>
+
+<h2>How this site defends itself</h2>
+<p>Three mechanisms, all visible to you:</p>
+<ul>
+  <li><b>Every page is dated.</b> The badge is a claim about freshness you can hold this site to. An old date means trust it less — that's the contract.</li>
+  <li><b>Every page cites official sources.</b> When this site and the docs disagree, the docs are right and this site has a bug.</li>
+  <li><b>Scope is deliberately narrow.</b> No API, no enterprise admin, nothing in fast-moving beta. Those omissions exist so the rest can stay true. A complete map that is six months stale is worse than a partial one that is right.</li>
+</ul>
+
+<div class="callout warn">
+  <div class="c-head">⚠️ If a page's date is old, believe the date</div>
+  <p>This site is one person's notes with a public URL. The verified badge is not a promise that a page is current — it is a precise statement about when someone last checked. That is the most honest thing an unofficial reference can offer.</p>
+</div>
+
+<div class="sources">
+  <h3>Official sources</h3>
+  <ul>
+    <li><a href="https://support.claude.com/en/articles/12138966-release-notes">Release notes</a> — the single feed to watch</li>
+    <li><a href="https://code.claude.com/docs/en/changelog">Claude Code changelog</a></li>
+    <li><a href="https://platform.claude.com/docs/en/about-claude/model-deprecations">Model deprecations</a> — the authoritative table</li>
+    <li><a href="https://platform.claude.com/docs/en/about-claude/models/migration-guide">Migration guide</a></li>
+    <li><a href="https://support.claude.com/en/articles/14503520-available-beta-and-research-preview-features">Beta and research preview features</a></li>
+  </ul>
+</div>
+`
+      }
+    ]
+  },
+
   /* ============================ APPENDIX ============================ */
   {
     part: "Appendix",
