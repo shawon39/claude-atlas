@@ -38,7 +38,7 @@ Contributor guidance — content rules, markup vocabulary, gotchas — is in [AG
 
 ## Features
 
-- **Jargon Decoder** — 25 terms. Hover any dotted word for a definition, click to open the full
+- **Jargon Decoder** — 30 terms. Hover any dotted word for a definition, click to open the full
   glossary. The 📖 button opens it anywhere.
 - **Light / dark** — follows your OS, with a toggle that persists.
 - **Search** — filters the sidebar and auto-expands matching sections.
@@ -54,7 +54,7 @@ Push to `main`. Pages is set to deploy from the branch root — no build, no Act
 | --- | --- |
 | Part 0 · Start Here | Complete |
 | Part 1 · Models | Complete |
-| Part 2 · Claude Code | Planned |
+| Part 2 · Claude Code | Complete |
 | Part 3 · Claude Desktop / Cowork | Planned |
 | Part 4 · claude.ai | Planned |
 | Part 5 · Recipes | Planned |

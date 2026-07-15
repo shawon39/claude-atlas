@@ -105,5 +105,25 @@ const GLOSSARY = {
   "prompt-caching": {
     term: "Prompt caching",
     def: "Reusing an already-processed prefix of a prompt so you don't pay full price to re-send it. Cache reads cost ~0.1× base input price. Any byte change in the prefix invalidates everything after it."
+  },
+  "worktree": {
+    term: "Git worktree",
+    def: "A second checkout of the same repository in a different folder, sharing one git history. Claude Code uses them so two sessions can work on two branches at once without fighting over the same files."
+  },
+  "checkpoint": {
+    term: "Checkpoint",
+    def: "A save point Claude Code takes as it edits. /rewind rolls the code back to an earlier message — and lets you choose whether to roll the conversation back with it, or keep what you both learned."
+  },
+  "slash-command": {
+    term: "Slash command",
+    def: "A command you type in Claude Code starting with / — like /plan, /compact, or /model. Custom ones come from your own skills, so /deploy-check can be something you wrote."
+  },
+  "auto-mode": {
+    term: "Auto mode",
+    def: "A permission mode where Claude acts without asking, but every action is screened by a safety classifier that blocks destructive things (force pushes, mass deletion, secrets leaving the machine). Not the same as bypassing permissions."
+  },
+  "tool-search": {
+    term: "Tool search",
+    def: "Loading MCP tool schemas only when needed. Tool names sit in context at startup; the full JSON schemas stay deferred until Claude actually reaches for one. It is why 20 MCP servers don't drown your context window."
   }
 };
