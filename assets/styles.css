@@ -18,9 +18,8 @@
   --link: #0969da;
   --code-bg: #f6f8fa;
   --code-text: #1f2328;
-  --tip-bg: #f0f7ff;    --tip-bd: #54aeff;
-  --warn-bg: #fff8c5;   --warn-bd: #d4a72c;  --warn-icon: #9a6700;
-  --try-bg: #e9f9ee;    --try-bd: #4ac26b;
+  --warn-icon: #9a6700;
+  --try-bd: #4ac26b;
   --brand-underline: rgba(9, 105, 218, .35);
   --shadow: 0 6px 24px rgba(20, 24, 33, .10);
   --shadow-tip: 0 12px 34px rgba(20, 24, 33, .20);
@@ -41,9 +40,8 @@
   --link: #4493f8;
   --code-bg: #151b23;
   --code-text: #e6edf3;
-  --tip-bg: #0f1d33;    --tip-bd: #1f6feb;
-  --warn-bg: #272115;   --warn-bd: #9e6a03;  --warn-icon: #d29922;
-  --try-bg: #0f2418;    --try-bd: #238636;
+  --warn-icon: #d29922;
+  --try-bd: #238636;
   --brand-underline: rgba(68, 147, 248, .45);
   --shadow: 0 6px 24px rgba(0, 0, 0, .45);
   --shadow-tip: 0 14px 38px rgba(0, 0, 0, .55);
@@ -361,17 +359,18 @@ table.doc th, table.doc td {
 }
 table.doc th { font-size: 13px; font-weight: 600; color: var(--text-soft); border-bottom-color: var(--text-soft); }
 
-/* Callouts — tinted panel, no side stripe */
+/* Callouts — one calm panel; only the header colour says tip or warning */
 .callout {
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
   border-radius: 10px;
   padding: 16px 20px;
   margin: 24px 0;
 }
 .callout .c-head { font-weight: 600; display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
 .callout p:last-child, .callout ul:last-child { margin-bottom: 0; }
-.callout.tip  { background: var(--tip-bg); }
-.callout.warn { background: var(--warn-bg); }
-.callout.try  { background: var(--try-bg); }
+.callout.tip .c-head  { color: var(--link); }
+.callout.warn .c-head { color: var(--warn-icon); }
 
 /* Jargon term — a clean, intentional underline (not a spell-check squiggle) */
 .jargon {
