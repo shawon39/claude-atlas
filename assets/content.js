@@ -50,7 +50,7 @@ ${VERIFIED}
 </ul>
 
 <div class="callout tip">
-  <div class="c-head">💡 Why the omissions matter</div>
+  <div class="c-head">Why the omissions matter</div>
   <p>The cuts keep the site small enough to maintain. Only a maintained site stays true. A partial map that is right beats a complete one that is six months stale.</p>
 </div>
 
@@ -99,7 +99,7 @@ ${VERIFIED}
 <p>There is a clean answer. Once you know the rule, the products stop feeling like a pile of overlaps.</p>
 
 <div class="callout tip">
-  <div class="c-head">💡 The one rule</div>
+  <div class="c-head">The one rule</div>
   <p>Pick the surface by <b>where the work lives</b>. Then decide <b>how much you want to stay in the loop</b>.</p>
 </div>
 
@@ -138,7 +138,7 @@ flowchart TD
 <p>Longer tasks run in the cloud and keep going after you close your laptop. Work that touches your own computer (local files, the built-in browser, <span class="jargon" data-term="computer-use">computer use</span>) needs Claude Desktop open.</p>
 
 <div class="callout warn">
-  <div class="c-head">⚠️ Rolling out, not everywhere yet</div>
+  <div class="c-head">Rolling out, not everywhere yet</div>
   <p>The merge began on 16 September 2026. It is rolling out gradually to Pro and Max on web, desktop, and mobile. Team gets it as a beta, and Enterprise when an admin turns on "Chat and Cowork unified". If your message box still shows <b>Chat</b> and <b>Cowork</b> options, you are on the old experience: pick Cowork to hand off a task. Once switched, an account cannot go back.</p>
 </div>
 
@@ -161,7 +161,7 @@ flowchart TD
 </ul>
 
 <div class="callout warn">
-  <div class="c-head">⚠️ Standalone Claude Design closes 14 December 2026</div>
+  <div class="c-head">Standalone Claude Design closes 14 December 2026</div>
   <p>The old site at claude.ai/design goes read-only on that date. Chats and comments do not transfer, and public links stop working. Move your design systems and projects into Claude before then.</p>
 </div>
 
@@ -238,7 +238,7 @@ sequenceDiagram
 <p>The window still fills. Agentic work fills it fast: a dozen file reads, every tool result, every test run. And the docs name a subtler problem, <span class="jargon" data-term="context-rot">context rot</span>: as the token count grows, accuracy and recall degrade.</p>
 
 <div class="callout warn">
-  <div class="c-head">⚠️ More context is not better</div>
+  <div class="c-head">More context is not better</div>
   <p>Curating what Claude sees matters as much as how much room there is. In the author's experience, a focused 30K-token session often beats a sprawling 300K one. This is why <span class="jargon" data-term="subagent">subagents</span> exist: they spend their own context on a messy search and hand back only the answer.</p>
 </div>
 
@@ -350,12 +350,12 @@ ${VERIFIED}
 </ul>
 
 <div class="callout warn">
-  <div class="c-head">⚠️ Sonnet 4.5 retires 30 November 2026</div>
+  <div class="c-head">Sonnet 4.5 retires 30 November 2026</div>
   <p><code>claude-sonnet-4-5-20250929</code> was deprecated on 30 September 2026. Requests will fail after 30 November 2026. The official replacement is <code>claude-sonnet-5-5</code>.</p>
 </div>
 
 <div class="callout warn">
-  <div class="c-head">⚠️ Do not add date suffixes to model IDs</div>
+  <div class="c-head">Do not add date suffixes to model IDs</div>
   <p>From the 4.6 generation on, a dateless ID like <code>claude-opus-5-5</code> <b>is</b> the pinned snapshot, not a floating alias. Use the ID exactly as listed. Date suffixes are a habit from older IDs such as <code>claude-sonnet-4-5-20250929</code>.</p>
 </div>
 
@@ -395,7 +395,7 @@ ${VERIFIED}
 <p>Usually not. Start with Opus 5.5 and raise <span class="jargon" data-term="effort">effort</span> to <code>high</code> or <code>xhigh</code>. Anthropic says Opus 5.5 performs at Fable 5.1's level on most work, at 40% of the per-token price. Large refactors are listed as Opus 5.5 work. The expensive mistake is assuming the biggest model gives the best outcome.</p>
 
 <div class="callout tip">
-  <div class="c-head">💡 The rule that saves the most money</div>
+  <div class="c-head">The rule that saves the most money</div>
   <p><b>Tune effort before you switch models.</b> This is Anthropic's own guidance: tuning effort is often a better lever than switching models.</p>
 </div>
 
@@ -460,7 +460,7 @@ flowchart TD
 <p>On Pro or Max, cost is not dollars per token. It is <b>your usage allowance</b>. claude.ai, Claude Code, and Claude Desktop share one limit, with a five-hour window and weekly caps. Max plans have a separate weekly limit for Fable. Fast mode in Claude Code bills to usage credits only.</p>
 
 <div class="callout warn">
-  <div class="c-head">⚠️ On a subscription, "always use the biggest model" doesn't mean a bigger bill</div>
+  <div class="c-head">On a subscription, "always use the biggest model" doesn't mean a bigger bill</div>
   <p>It means hitting a wall on Thursday. Keep the expensive models and high effort for the work that needs them.</p>
 </div>
 
@@ -504,7 +504,7 @@ ${VERIFIED}
 <p>Claude reasons before answering. On current models that reasoning is <span class="jargon" data-term="thinking">adaptive</span>: Claude decides per request when to think and how deeply. You do not set a thinking budget. Effort steers it.</p>
 
 <div class="callout warn">
-  <div class="c-head">⚠️ Deprecated: budget_tokens</div>
+  <div class="c-head">Deprecated: budget_tokens</div>
   <p><code>thinking: {type: "enabled", budget_tokens: N}</code> is the old way. It is <b>deprecated</b> on Opus 4.6 and Sonnet 4.6. It is <b>rejected with a 400 error</b> on every later model. Omit <code>thinking</code> or send <code>{type: "adaptive"}</code>, and control depth with effort.</p>
 </div>
 
@@ -543,7 +543,7 @@ ${VERIFIED}
 </table>
 
 <div class="callout warn">
-  <div class="c-head">⚠️ Opus 5.5 defaults to medium, not high</div>
+  <div class="c-head">Opus 5.5 defaults to medium, not high</div>
   <p>A request that omits effort runs one level lower on Opus 5.5 than on Opus 5. Level names are not equal across models either. Anthropic reports Opus 5.5 at <code>medium</code> matches or beats Opus 5 at <code>high</code>. Re-test your settings when you change model rather than copying them over.</p>
 </div>
 
@@ -551,7 +551,7 @@ ${VERIFIED}
 <p>Low effort really is low. At <code>low</code>, Haiku 5.5 is more likely to skip a search or a check, and Fable 5.1 calls search tools less often. Good for latency. Risky on complex problems.</p>
 
 <div class="callout tip">
-  <div class="c-head">💡 Higher effort can be cheaper overall</div>
+  <div class="c-head">Higher effort can be cheaper overall</div>
   <p>The author's experience: on agentic work, better planning means fewer wrong turns and fewer tool calls. A higher setting can cost less end to end than a low one that flails. Measure on your own tasks.</p>
 </div>
 
@@ -576,7 +576,7 @@ ${VERIFIED}
 </table>
 
 <div class="callout warn">
-  <div class="c-head">⚠️ Fast mode on Opus 4.6 fails silently</div>
+  <div class="c-head">Fast mode on Opus 4.6 fails silently</div>
   <p>A <code>speed: "fast"</code> request to Opus 4.6 with the beta header succeeds but runs at standard speed. Check <code>usage.speed</code> in the response: it says <code>"standard"</code>. Other unsupported models return an error.</p>
 </div>
 
@@ -644,7 +644,7 @@ ${VERIFIED}
 <p>The author's advice: for new work, skip the listed replacement and go straight to the current lineup (Opus 5.5, Sonnet 5.5, Haiku 5.5). Some retired models remain on Bedrock or Google Cloud, which set their own dates.</p>
 
 <div class="callout warn">
-  <div class="c-head">⚠️ Retiring soon: Sonnet 4.5</div>
+  <div class="c-head">Retiring soon: Sonnet 4.5</div>
   <p><code>claude-sonnet-4-5-20250929</code> was deprecated on 30 September 2026 and <b>retires 30 November 2026</b>. Migrate to <code>claude-sonnet-5-5</code>. Also watch Opus 4.5, whose retirement is "not sooner than" 24 November 2026.</p>
 </div>
 
@@ -653,49 +653,49 @@ ${VERIFIED}
 <h2>API parameters that now fail</h2>
 
 <div class="callout warn">
-  <div class="c-head">⚠️ temperature, top_p, top_k</div>
+  <div class="c-head">temperature, top_p, top_k</div>
   <p><b>Old:</b> <code>temperature: 0.7</code> to tune creativity, <code>temperature: 0</code> for consistency.<br>
      <b>New:</b> Remove them. Steer with prompting.</p>
   <p>API version <code>2026-10-21</code> <b>removed</b> all three. Sending any of them returns a 400, even at the default value. On the older <code>2023-06-01</code> version, non-default values return a 400 on Claude 4.7 and later models. On older models that still accepted a low temperature, that effect is gone, and no other setting replaces it.</p>
 </div>
 
 <div class="callout warn">
-  <div class="c-head">⚠️ budget_tokens</div>
+  <div class="c-head">budget_tokens</div>
   <p><b>Old:</b> <code>thinking: { type: "enabled", budget_tokens: 10000 }</code><br>
      <b>New:</b> omit <code>thinking</code> (or send <code>{ type: "adaptive" }</code>) and set <code>output_config: { effort: "high" }</code>.</p>
   <p>Deprecated on Opus 4.6 and Sonnet 4.6. <b>Returns 400</b> on every later model. There is no direct replacement for the number. <span class="jargon" data-term="effort">Effort</span> is the control now.</p>
 </div>
 
 <div class="callout warn">
-  <div class="c-head">⚠️ Turning thinking off</div>
+  <div class="c-head">Turning thinking off</div>
   <p><b>Old:</b> <code>thinking: { type: "disabled" }</code> for speed.<br>
      <b>New:</b> lower effort instead.</p>
   <p><b>Returns 400</b> on Opus 5.5, Fable 5.1, and Sonnet 5.5. Sonnet 5.5 offers <code>{ type: "between_tools" }</code> as its lowest setting.</p>
 </div>
 
 <div class="callout warn">
-  <div class="c-head">⚠️ Forced tool use</div>
+  <div class="c-head">Forced tool use</div>
   <p><b>Old:</b> <code>tool_choice: { type: "any" }</code> or <code>{ type: "tool", name: "..." }</code> to force a call.<br>
      <b>New:</b> <code>tool_choice: { type: "auto" }</code> with <code>strict: true</code> on the tool, or structured outputs. Say in the prompt when to use the tool.</p>
   <p><b>Returns 400</b> on Fable 5.1, Opus 5.5, and Sonnet 5.5.</p>
 </div>
 
 <div class="callout warn">
-  <div class="c-head">⚠️ Assistant prefill</div>
+  <div class="c-head">Assistant prefill</div>
   <p><b>Old:</b> ending <code>messages</code> with an <code>assistant</code> turn to force a response shape.<br>
      <b>New:</b> structured outputs via <code>output_config.format</code>, or a system-prompt instruction.</p>
   <p><b>Returns 400</b> on Opus 4.6 and every later Opus, Fable 5.1, Sonnet 5.5, and Haiku 5.5.</p>
 </div>
 
 <div class="callout warn">
-  <div class="c-head">⚠️ output_format</div>
+  <div class="c-head">output_format</div>
   <p><b>Old:</b> top-level <code>output_format</code> on <code>messages.create()</code><br>
      <b>New:</b> <code>output_config: { format: { type: "json_schema", schema: ... } }</code></p>
   <p><code>output_format</code> is deprecated. It now returns a 400 unless you add the <code>structured-outputs-2025-11-13</code> beta header.</p>
 </div>
 
 <div class="callout warn">
-  <div class="c-head">⚠️ Editing conversation history</div>
+  <div class="c-head">Editing conversation history</div>
   <p><b>Old:</b> rewriting earlier turns, the system prompt, or the tool list between requests.<br>
      <b>New:</b> keep the conversation append-only. Add instructions with mid-conversation system messages.</p>
   <p>On Fable 5.1 and Opus 5.5, changing anything before a thinking block invalidates it. For accounts created on or after 31 August 2026, the next request returns a 400.</p>
@@ -821,7 +821,7 @@ flowchart LR
 <p>Teleport, <code>--cloud</code>, and <code>/desktop</code> need a claude.ai subscription login, not an API key.</p>
 
 <div class="callout tip">
-  <div class="c-head">💡 The IDE plugins wrap the same CLI</div>
+  <div class="c-head">The IDE plugins wrap the same CLI</div>
   <p>The VS Code extension bundles its own copy of the CLI for its chat panel. The JetBrains plugin runs your installed <code>claude</code> in the IDE terminal, so install the CLI first. Both start a hidden built-in MCP server named <code>ide</code>. It hands Claude your current selection and lets it read your IDE's diagnostics. That is most of what makes IDE use feel different.</p>
 </div>
 
@@ -886,7 +886,7 @@ ${VERIFIED}
 <p>Check the install with <code>claude --version</code>. For a fuller check, run <code>claude doctor</code> in your shell.</p>
 
 <div class="callout warn">
-  <div class="c-head">⚠️ Only the native install updates itself</div>
+  <div class="c-head">Only the native install updates itself</div>
   <p>Native installs update in the background. Homebrew, WinGet, apt, dnf, and apk do not, by default. Upgrade them yourself, or set <code>CLAUDE_CODE_PACKAGE_MANAGER_AUTO_UPDATE=1</code> to let Claude Code run the Homebrew or WinGet upgrade for you. The <code>claude-code</code> cask tracks the stable channel, about a week behind. <code>claude-code@latest</code> gets every release.</p>
 </div>
 
@@ -902,7 +902,7 @@ ${VERIFIED}
 <p>Run <code>claude</code> and follow the browser prompt. If the browser cannot reach back, for example over SSH or in a container, paste the code it shows into the terminal.</p>
 
 <div class="callout warn">
-  <div class="c-head">⚠️ The Free plan does not include Claude Code</div>
+  <div class="c-head">The Free plan does not include Claude Code</div>
   <p>Pro is the entry point. Claude Code is included in every paid plan.</p>
 </div>
 
@@ -925,7 +925,7 @@ ${VERIFIED}
 </ol>
 
 <div class="callout tip">
-  <div class="c-head">💡 The classic billing surprise</div>
+  <div class="c-head">The classic billing surprise</div>
   <p>An exported <code>ANTHROPIC_API_KEY</code> outranks your subscription. In an interactive session, Claude Code asks once whether to use it and remembers your answer. In <code>-p</code> mode it always uses it. So usage can land on the API instead of your plan. If billing looks wrong, run <code>/status</code> to see the active credential, then <code>unset ANTHROPIC_API_KEY</code>.</p>
 </div>
 
@@ -963,7 +963,7 @@ ${VERIFIED}
 <p><span class="jargon" data-term="plan-mode">Plan mode</span> makes Claude research and propose a change without editing your code. You read the plan, then approve it. Press <b>Shift+Tab</b> to cycle into it, or start one prompt with <code>/plan</code>, as in <code>/plan fix the auth bug</code>.</p>
 
 <div class="callout tip">
-  <div class="c-head">💡 Author's take: the highest-leverage habit</div>
+  <div class="c-head">Author's take: the highest-leverage habit</div>
   <p>For any change bigger than a one-liner, plan first. Reading a wrong plan costs thirty seconds. Reviewing a wrong diff across nine files costs your afternoon.</p>
 </div>
 
@@ -1002,7 +1002,7 @@ stateDiagram-v2
 <p>Some paths are protected. Writes to <code>.git</code>, <code>.claude</code>, <code>.vscode</code>, <code>.idea</code>, <code>.husky</code>, shell RC files such as <code>.bashrc</code> and <code>.zshrc</code>, <code>.gitconfig</code>, <code>.npmrc</code>, <code>.mcp.json</code>, and <code>.claude.json</code> are never approved silently. Manual and acceptEdits ask. Auto sends them to the classifier. Only bypassPermissions lets them through.</p>
 
 <div class="callout warn">
-  <div class="c-head">⚠️ bypassPermissions means what it says</div>
+  <div class="c-head">bypassPermissions means what it says</div>
   <p>No classifier, no prompts, and no protection against prompt injection. Use it only in an isolated container or VM, ideally without internet. It refuses to run as root on Linux and macOS. Deny rules still apply.</p>
 </div>
 
@@ -1100,7 +1100,7 @@ flowchart TD
 <p>Inside a settings file you will mostly find <code>permissions</code> (allow, ask, and deny rules), <code>env</code> (environment variables), <code>hooks</code>, and <code>model</code>. Run <code>/status</code> to see which files loaded.</p>
 
 <div class="callout warn">
-  <div class="c-head">⚠️ A committed file can't grant everything</div>
+  <div class="c-head">A committed file can't grant everything</div>
   <p>Allow rules in a repo's <code>settings.json</code> apply only after each teammate trusts the folder. Deny and ask rules apply at once. A project file cannot switch on <code>auto</code> or <code>bypassPermissions</code> as the default mode; set those in user or managed settings.</p>
 </div>
 
@@ -1123,7 +1123,7 @@ flowchart TD
 <p>Two more files live outside the folder. <code>~/.claude.json</code> holds your account state, trust decisions, and personal MCP servers; Claude Code writes it for you. <code>~/.claude/projects/&lt;project&gt;/</code> holds session transcripts and <span class="jargon" data-term="memory">auto memory</span>.</p>
 
 <div class="callout tip">
-  <div class="c-head">💡 The commit rule</div>
+  <div class="c-head">The commit rule</div>
   <p>Commit what makes the team faster: <code>CLAUDE.md</code>, <code>.claude/settings.json</code>, shared skills, agents, commands, workflows, and <code>.mcp.json</code>. Keep what is yours alone out of git: <code>settings.local.json</code> and <code>CLAUDE.local.md</code>. Transcripts and auto memory live in your home directory and never enter the repo.</p>
 </div>
 
@@ -1131,7 +1131,7 @@ flowchart TD
 <p>Transcripts are plain text, not encrypted. Anything a tool read, including a <code>.env</code> file, can end up in one. Claude Code deletes transcripts and checkpoint snapshots after 30 days; change that with <code>cleanupPeriodDays</code>. Auto memory is exempt from that cleanup. To wipe one project's local state now, run <code>claude purge</code> with the project path. Add <code>--dry-run</code> to preview.</p>
 
 <div class="callout warn">
-  <div class="c-head">⚠️ .claude is a protected path</div>
+  <div class="c-head">.claude is a protected path</div>
   <p>Claude will not silently edit its own config. It gets the same treatment as <code>.git</code> and your shell RC files. A prompt-injected instruction to quietly rewrite your permissions does not get to succeed silently.</p>
 </div>
 
@@ -1173,7 +1173,7 @@ ${VERIFIED}
 <p><code>@path/to/file</code> imports another file, up to four hops deep. Imports help organize but do not save context: the imported file loads too. HTML comments (<code>&lt;!-- note --&gt;</code>) are stripped before loading, so you can leave notes for humans for free.</p>
 
 <div class="callout warn">
-  <div class="c-head">⚠️ Keep each CLAUDE.md under 200 lines</div>
+  <div class="c-head">Keep each CLAUDE.md under 200 lines</div>
   <p>That is the official target. Longer files use more context and get followed less reliably. Claude Code warns at startup when a file runs long. If a line isn't true for <i>most</i> requests, it does not belong here.</p>
 </div>
 
@@ -1236,7 +1236,7 @@ paths:
 </ul>
 
 <div class="callout tip">
-  <div class="c-head">💡 A CLAUDE.md that earns its keep</div>
+  <div class="c-head">A CLAUDE.md that earns its keep</div>
   <p>Commands, conventions, and gotchas — the things a new hire asks on day one. Not a style guide, not an architecture tour, not anything Claude can read from the code. The <code>/doctor</code> checkup cuts exactly that kind of derivable content.</p>
 </div>
 
@@ -1305,7 +1305,7 @@ Before deploying, in order:
 </table>
 
 <div class="callout tip">
-  <div class="c-head">💡 The description does all the work</div>
+  <div class="c-head">The description does all the work</div>
   <p>It is the only part Claude sees until the skill fires. "Deployment stuff" never triggers. "Pre-deployment checks for the Salesforce org. Use before any sf project deploy" triggers exactly when it should. Write the trigger condition, not a title. The listing cuts the description and <code>when_to_use</code> at 1,536 characters combined.</p>
 </div>
 
@@ -1328,7 +1328,7 @@ Before deploying, in order:
 </ul>
 
 <div class="callout warn">
-  <div class="c-head">⚠️ A skill is code you run</div>
+  <div class="c-head">A skill is code you run</div>
   <p>Skills can carry scripts and steer Claude's tools. Install them only from sources you trust, and read the files first.</p>
 </div>
 
@@ -1430,12 +1430,12 @@ List each component that imports the deprecated adapter, with file and line.</co
 <p>Fields worth knowing: <code>tools</code> / <code>disallowedTools</code>, <code>model</code> (<code>sonnet</code>, <code>opus</code>, <code>haiku</code>, <code>fable</code>, a full model ID, or <code>inherit</code>), <code>effort</code>, <code>permissionMode</code>, <code>skills</code>, <code>background</code>, and <code>isolation: worktree</code>. Claude Code picks up edits to these folders within seconds.</p>
 
 <div class="callout warn">
-  <div class="c-head">⚠️ The /agents wizard is gone</div>
+  <div class="c-head">The /agents wizard is gone</div>
   <p>Since v2.1.198, <code>/agents</code> only prints a reminder. Ask Claude to write the subagent, or edit the file yourself.</p>
 </div>
 
 <div class="callout tip">
-  <div class="c-head">💡 Match the model to the job</div>
+  <div class="c-head">Match the model to the job</div>
   <p>A subagent grepping 30 files is reading, not reasoning. Haiku 5.5 is the first Haiku with adjustable <span class="jargon" data-term="effort">effort</span>, and Anthropic pitches it as a subagent beside Opus 5.5 and Sonnet 5.5. The built-in Explore runs on Opus on a subscription. For cheap bulk reading, the author's advice is a custom subagent with <code>model: haiku</code>. See <a href="#choosing">choosing a model</a>.</p>
 </div>
 
@@ -1468,7 +1468,7 @@ List each component that imports the deprecated adapter, with file and line.</co
 <p>Workflows run up to 16 agents at once by default, capped at 1,000 per run. Agent teams and projects are still moving. In the author's view, know they exist but don't build your week on them yet.</p>
 
 <div class="callout warn">
-  <div class="c-head">⚠️ Subagents are not free</div>
+  <div class="c-head">Subagents are not free</div>
   <p>Each one is a fresh conversation with its own token bill, and it counts toward the same usage limits as your main session. Agent teams use significantly more tokens than a single session. Fanning out five subagents to answer what one <code>grep</code> would settle costs more than it saves. Fan out when the work is both parallel and expensive.</p>
 </div>
 
@@ -1497,7 +1497,7 @@ ${VERIFIED}
 <p>That is the whole case for <span class="jargon" data-term="hook">hooks</span>. An instruction is a request the model interprets. A hook is your code, fired by Claude Code itself, every time.</p>
 
 <div class="callout tip">
-  <div class="c-head">💡 The rule</div>
+  <div class="c-head">The rule</div>
   <p>If it <i>must</i> happen, make it a hook. If it <i>should usually</i> happen, an instruction is fine. Never write "CRITICAL: YOU MUST ALWAYS…" in CLAUDE.md for something a five-line hook guarantees.</p>
 </div>
 
@@ -1601,7 +1601,7 @@ sequenceDiagram
 <p>Use a settings hook to block, allow, or log an event with a script. Use a mod when you want interface or to rewrite events. Mods are not sandboxed, so install them only from sources you trust.</p>
 
 <div class="callout warn">
-  <div class="c-head">⚠️ Hooks run with your permissions</div>
+  <div class="c-head">Hooks run with your permissions</div>
   <p>Command hooks run shell commands with your full user permissions. In an interactive session, Claude Code holds back settings-file hooks until you accept the folder's trust dialog. A <code>claude -p</code> run shows no dialog and treats the folder as trusted. So hooks committed in a repo's <code>.claude/settings.json</code> will run. Before scripting <code>-p</code> over a repo you didn't write, read its <code>.claude/</code> files, or use <code>--bare</code>.</p>
 </div>
 
@@ -1648,7 +1648,7 @@ claude mcp add --transport stdio salesforce -- npx -y @some/salesforce-mcp</code
 </table>
 
 <div class="callout warn">
-  <div class="c-head">⚠️ SSE is deprecated</div>
+  <div class="c-head">SSE is deprecated</div>
   <p>The SSE transport is deprecated. Use HTTP where the server supports it.</p>
 </div>
 
@@ -1670,7 +1670,7 @@ claude mcp add --transport stdio salesforce -- npx -y @some/salesforce-mcp</code
 <p><code>/mcp</code> shows each server's status, tool count and sign-in state, and turns servers off without removing them. <code>/context</code> shows what is filling your context right now.</p>
 
 <div class="callout tip">
-  <div class="c-head">💡 Turn off what you're not using</div>
+  <div class="c-head">Turn off what you're not using</div>
   <p>Even deferred, every server adds its tool names and instructions to each session. A server you last used months ago is a small tax on every request. Toggle it off in <code>/mcp</code>.</p>
 </div>
 
@@ -1688,12 +1688,12 @@ claude mcp add --transport stdio salesforce -- npx -y @some/salesforce-mcp</code
 <p>This is where MCP earns its keep for org work. With a Salesforce MCP server pointed at a sandbox, Claude can query the org while it reads your repo. The exact tools depend on the server. "Why does this trigger fail in the sandbox but not locally?" becomes answerable, because Claude can look at both.</p>
 
 <div class="callout warn">
-  <div class="c-head">⚠️ An MCP server is code you are trusting</div>
+  <div class="c-head">An MCP server is code you are trusting</div>
   <p>It runs with your credentials and can act on your systems. The docs say to verify you trust each server before connecting it. Servers that fetch outside content expose you to <span class="jargon" data-term="prompt-injection">prompt injection</span>. Also note: a <code>claude -p</code> run connects a repo's <code>.mcp.json</code> servers without asking, unless you pass <code>--bare</code>.</p>
 </div>
 
 <div class="callout warn">
-  <div class="c-head">⚠️ Claude Code's MCP is local; claude.ai's custom connectors are not</div>
+  <div class="c-head">Claude Code's MCP is local; claude.ai's custom connectors are not</div>
   <p>Here, a stdio server runs on your machine as your user. A custom connector on claude.ai is reached from <b>Anthropic's cloud</b>. It must be reachable over the public internet from Anthropic's IP ranges. A server behind a VPN or firewall won't connect unless you allowlist those IPs. Same protocol, different trust and network model.</p>
 </div>
 
@@ -1740,7 +1740,7 @@ ${VERIFIED}
 <p>Other flags load the rest: <code>--mcp-config</code> for servers, <code>--agents</code> for subagents, <code>--plugin-dir</code> for a plugin. The docs recommend <code>--bare</code> for scripted calls and say it will become the default for <code>-p</code>.</p>
 
 <div class="callout tip">
-  <div class="c-head">💡 Use --bare for anything automated</div>
+  <div class="c-head">Use --bare for anything automated</div>
   <p>Without it, a <code>-p</code> run executes the hooks in a repo's <code>.claude/settings.json</code> and connects its <code>.mcp.json</code> servers, even in a folder you never trusted. A teammate's <code>~/.claude/</code> can also change what runs. <code>--bare</code> never reads OAuth, the keychain, or <code>CLAUDE_CODE_OAUTH_TOKEN</code>. Authenticate with <code>ANTHROPIC_API_KEY</code> or an <code>apiKeyHelper</code> in your settings JSON.</p>
 </div>
 
@@ -1790,7 +1790,7 @@ flowchart LR
 <p>The GitHub Action takes either <code>ANTHROPIC_API_KEY</code> or <code>CLAUDE_CODE_OAUTH_TOKEN</code>. <code>claude setup-token</code> creates that token: valid one year, Pro, Max, Team or Enterprise, model requests only. For a secret shared across an organization, use an API key. An OAuth token is tied to the subscription of whoever created it.</p>
 
 <div class="callout warn">
-  <div class="c-head">⚠️ Untrusted input meets your credentials</div>
+  <div class="c-head">Untrusted input meets your credentials</div>
   <p>A PR contains code someone else wrote, and your job feeds it to an agent holding your tokens. On public repos, GitHub withholds secrets from runs triggered by fork PRs. By default the Action also requires write access from the person who triggers it, and rejects bots. Still treat diff content as hostile. The author's advice: pin <code>--allowedTools</code> to the minimum, never give a fork-triggered job write access, and prefer commenting over acting.</p>
 </div>
 
@@ -1844,7 +1844,7 @@ ${VERIFIED}
 <p>Conversations, <span class="jargon" data-term="project">projects</span>, and <span class="jargon" data-term="memory">memory</span> follow your account across web, desktop, and mobile.</p>
 
 <div class="callout warn">
-  <div class="c-head">⚠️ Chat and Cowork are now one</div>
+  <div class="c-head">Chat and Cowork are now one</div>
   <p>Desktop used to have separate Chat, Cowork, and Code tabs. On accounts with the new unified experience, Chat and Cowork are a single conversation, and Claude starts a task when it needs to. Code is still its own tab. If you still see separate Chat and Cowork options, your account has not moved yet. See <a href="#cowork">3.2</a>.</p>
 </div>
 
@@ -1870,12 +1870,12 @@ ${VERIFIED}
 <p>Install from Settings → Desktop app → Extensions → <b>Browse extensions</b>. To install a file you were given, use Advanced settings → <b>Install Extension…</b>.</p>
 
 <div class="callout warn">
-  <div class="c-head">⚠️ Renamed: .dxt is now .mcpb</div>
+  <div class="c-head">Renamed: .dxt is now .mcpb</div>
   <p>Desktop extensions used the <code>.dxt</code> extension. They are now <b>.mcpb</b> (MCP Bundle). Old <code>.dxt</code> files still work. Anything written today should say <code>.mcpb</code>.</p>
 </div>
 
 <div class="callout tip">
-  <div class="c-head">💡 Local tools belong here</div>
+  <div class="c-head">Local tools belong here</div>
   <p>Desktop runs local MCP servers <b>on your machine</b>, with your permissions. Custom <span class="jargon" data-term="connector">connectors</span> are different: Anthropic's cloud reaches them, even when you use Desktop. If a tool must touch your filesystem or something behind your VPN, use a local server in Desktop. See <a href="#connectors-files">4.5</a>.</p>
 </div>
 
@@ -1884,7 +1884,7 @@ ${VERIFIED}
 <p>On Linux, install from Anthropic's apt repository. The app does not update itself; updates arrive with <code>sudo apt upgrade</code>. A manual <code>.deb</code> install also works but gets no updates.</p>
 
 <div class="callout warn">
-  <div class="c-head">⚠️ The Linux beta is missing pieces</div>
+  <div class="c-head">The Linux beta is missing pieces</div>
   <p>No computer use and no dictation. Quick entry works on X11; on Wayland it depends on your desktop's global-shortcuts support. Cowork tasks on Linux need KVM hardware virtualisation, about 25 GB of free disk, and at least 8 GB of RAM.</p>
 </div>
 
@@ -1927,13 +1927,13 @@ ${VERIFIED}
 <p>That is <span class="jargon" data-term="cowork">Cowork</span>. You describe an outcome. Claude makes a plan, works through the steps, and comes back with finished files: spreadsheets with working formulas, Word-style documents, PowerPoint-compatible decks, organised folders.</p>
 
 <div class="callout warn">
-  <div class="c-head">⚠️ Cowork is no longer a separate mode</div>
+  <div class="c-head">Cowork is no longer a separate mode</div>
   <p>Since 16 September 2026, chat and Cowork are merging into one conversation. You no longer pick a mode first. You ask, and Claude decides whether to answer or run a task. Your chats, Cowork tasks, projects, connectors, and skills carry over. Once your account switches, you cannot switch back.</p>
   <p>The rollout is gradual: Pro and Max first, Team in beta, and Enterprise where an admin turns on "Chat and Cowork unified". If your message box still shows separate Chat and Cowork options, you are on the old layout.</p>
 </div>
 
 <div class="callout tip">
-  <div class="c-head">💡 What Cowork is actually for</div>
+  <div class="c-head">What Cowork is actually for</div>
   <p>When Anthropic reviewed Cowork usage in July 2026, <b>more than 90% was not software development</b>. Business operations and content creation made up roughly half. If you want Claude to write code, use <a href="#what-is-claude-code">Claude Code</a>.</p>
 </div>
 
@@ -1969,7 +1969,7 @@ flowchart TD
 </table>
 
 <div class="callout warn">
-  <div class="c-head">⚠️ Cloud tasks reach your files only while Desktop is open</div>
+  <div class="c-head">Cloud tasks reach your files only while Desktop is open</div>
   <p>Close the app and a cloud task loses the bridge to your computer. It keeps running, but it can no longer see your folders, your browser, or your screen. If a task needs local files, leave the app open.</p>
 </div>
 
@@ -1989,7 +1989,7 @@ flowchart TD
 <p>In every mode, Claude asks before permanently deleting a file. Connector sign-in tokens never enter the sandbox; connector calls happen on Anthropic's servers.</p>
 
 <div class="callout warn">
-  <div class="c-head">⚠️ "You remain responsible for all actions taken by Claude performed on your behalf"</div>
+  <div class="c-head">"You remain responsible for all actions taken by Claude performed on your behalf"</div>
   <p>That is Anthropic's wording. Defences against prompt injection — hidden instructions in a page or file that try to steer Claude — include training, content classifiers, and action screening in Auto mode. Anthropic still calls the risk non-zero. A task that reads untrusted content and is allowed to act is a real risk. Connect a dedicated working folder, keep backups, and attach only the connectors the task needs.</p>
 </div>
 
@@ -2062,7 +2062,7 @@ ${VERIFIED}
 <p>Plugins save to your account. They also appear in Claude Code (v2.1.273 or later) when you sign in with the same Claude account — not with an API key or a cloud provider such as Bedrock.</p>
 
 <div class="callout warn">
-  <div class="c-head">⚠️ Part of a plugin greys out in chat</div>
+  <div class="c-head">Part of a plugin greys out in chat</div>
   <p>Skills and commands work everywhere. <b>Hooks, subagents, and local MCP servers run only in Cowork and Claude Code.</b> If those parts look greyed out in chat, that is expected. Local MCP servers run on your computer with your permissions, so install plugins only from sources you trust.</p>
 </div>
 
@@ -2072,7 +2072,7 @@ ${VERIFIED}
 <p>Cadences: hourly, daily, weekly, weekdays, or manual (run on demand). Each run is its own session. From the Scheduled sidebar you can see past and upcoming runs, edit, pause, resume, or run a task now. All paid plans.</p>
 
 <div class="callout tip">
-  <div class="c-head">💡 They run without you</div>
+  <div class="c-head">They run without you</div>
   <p>Scheduled tasks run in the cloud. Your computer can be asleep and the app closed. That is the difference between "a macro I trigger" and "a thing that happens."</p>
 </div>
 
@@ -2094,7 +2094,7 @@ ${VERIFIED}
 <p><i>Author's opinion:</i> keep it that way. Driving an app by screenshot is slow and brittle. Use it for the legacy desktop app with no API, not for something a connector already does.</p>
 
 <div class="callout warn">
-  <div class="c-head">⚠️ Guardrails, and where they stop</div>
+  <div class="c-head">Guardrails, and where they stop</div>
   <p>Claude asks permission for each app. Investment, trading, and crypto apps are blocked by default, and you can add your own blocklist. But there is no sandbox between Claude and your screen, and if Claude clicks a link, it opens even in an app you never approved. Block sensitive apps such as banking, health portals, and dating apps. Start with low-stakes tasks and watch closely.</p>
 </div>
 
@@ -2142,7 +2142,7 @@ ${VERIFIED}
 <p>Chat and <span class="jargon" data-term="cowork">Cowork</span> used to be two modes you picked between. Since 16 September 2026 they are one conversation. You ask, and Claude decides whether to answer or run a task. So the real choice is now how you work, not which product you open.</p>
 
 <div class="callout warn">
-  <div class="c-head">⚠️ Still seeing separate Chat and Cowork options?</div>
+  <div class="c-head">Still seeing separate Chat and Cowork options?</div>
   <p>The merge is rolling out gradually: Pro and Max first, Team in beta, Enterprise where an admin turns on "Chat and Cowork unified". On the old layout, pick Chat to steer and Cowork to hand off. Once your account switches, it cannot switch back.</p>
 </div>
 
@@ -2160,7 +2160,7 @@ ${VERIFIED}
 <b>It breaks when:</b> you wanted to shape the argument yourself. Delegation means accepting Claude's judgement calls.</p>
 
 <div class="callout tip">
-  <div class="c-head">💡 Just want an answer?</div>
+  <div class="c-head">Just want an answer?</div>
   <p>Say so. Tell Claude you need a quick answer, not a file or a finished deliverable. That keeps a simple question from turning into a task.</p>
 </div>
 
@@ -2183,7 +2183,7 @@ ${VERIFIED}
 </table>
 
 <div class="callout tip">
-  <div class="c-head">💡 The tiebreaker</div>
+  <div class="c-head">The tiebreaker</div>
   <p>Ask what you want to be doing while it runs. Thinking alongside it → steer it. Something else entirely → hand it off. Reviewing its work like a colleague's PR → Claude Code.</p>
 </div>
 
@@ -2252,7 +2252,7 @@ ${VERIFIED}
 <p>On paid plans, a project near the <span class="jargon" data-term="context-window">context window</span> limit switches on <span class="jargon" data-term="rag">RAG</span> mode. Anthropic says this expands capacity <b>by up to 10×</b>. Claude then searches the knowledge base instead of holding all of it at once.</p>
 
 <div class="callout tip">
-  <div class="c-head">💡 What retrieval costs you</div>
+  <div class="c-head">What retrieval costs you</div>
   <p>Retrieval means Claude sees the <i>relevant parts</i>, not everything. Great for a 200-document library. Worse when a question needs links across documents that no single search surfaces. The author's advice: if precision matters more than breadth, a small curated project beats a giant one.</p>
 </div>
 
@@ -2267,7 +2267,7 @@ ${VERIFIED}
 <p>Sharing is a Team and Enterprise feature. A project is <b>Public</b> (everyone in the org) or <b>Private</b> (invited members only). Members get <b>Can view</b> or <b>Can edit</b>. Chats inside a shared project stay private unless you share them.</p>
 
 <div class="callout warn">
-  <div class="c-head">⚠️ Projects are not Claude Code's CLAUDE.md</div>
+  <div class="c-head">Projects are not Claude Code's CLAUDE.md</div>
   <p>Same instinct, different surfaces. Project instructions apply to chats on claude.ai. <a href="#memory-rules">CLAUDE.md</a> applies to Claude Code sessions in a repo. They share nothing.</p>
   <p>Chat and Cowork projects now work the same way. Where chat and <a href="#cowork">Cowork</a> have merged, projects work in every conversation.</p>
 </div>
@@ -2321,7 +2321,7 @@ ${VERIFIED}
 <p>Since 16 September 2026, Docs, Slides, and Design work in any conversation, including Claude Code. Artifacts need <b>Create and edit files</b> turned on (formerly "Code execution and file creation"), under Settings → Capabilities.</p>
 
 <div class="callout warn">
-  <div class="c-head">⚠️ Standalone Claude Design closes 14 December 2026</div>
+  <div class="c-head">Standalone Claude Design closes 14 December 2026</div>
   <p>The separate site at claude.ai/design goes read-only on that date. Move your design systems now, from the Artifacts page in Claude. Chats and comments do not transfer. Public project links stop working.</p>
 </div>
 
@@ -2336,7 +2336,7 @@ ${VERIFIED}
 <p>An artifact can call Claude itself, so it works as a small app. There is no backend, API key, or deploy. Each person who uses it signs in with their own Claude account, and the usage counts against <i>their</i> plan. New artifacts ask permission the first time they use Claude.</p>
 
 <div class="callout tip">
-  <div class="c-head">💡 The one people miss</div>
+  <div class="c-head">The one people miss</div>
   <p>The author's view: for a prototype that would otherwise never get built, this is the shortest path there is. Build the tool in a chat, share the link, done.</p>
 </div>
 
@@ -2349,7 +2349,7 @@ ${VERIFIED}
 </ul>
 
 <div class="callout warn">
-  <div class="c-head">⚠️ "Anyone with the link" means anyone</div>
+  <div class="c-head">"Anyone with the link" means anyone</div>
   <p>A link to an artifact built from your org's data can be forwarded anywhere. Check what is baked into it before you share. For anything sensitive, share with named people instead.</p>
 </div>
 
@@ -2395,7 +2395,7 @@ ${VERIFIED}
 <p><b>Settings → Your Claude → Manage</b> (next to Your memory) lists every topic. Edit or delete any of them.</p>
 
 <div class="callout tip">
-  <div class="c-head">💡 Go read your memory once</div>
+  <div class="c-head">Go read your memory once</div>
   <p>If Claude keeps making an assumption you can't place — the wrong tech stack, a project you finished — it is probably a saved topic. The author's tip: two minutes in that list fixes months of small annoyances.</p>
 </div>
 
@@ -2411,7 +2411,7 @@ ${VERIFIED}
 </table>
 
 <div class="callout warn">
-  <div class="c-head">⚠️ Deleting a chat does not delete what it taught Claude</div>
+  <div class="c-head">Deleting a chat does not delete what it taught Claude</div>
   <p>Memory topics saved from a conversation survive when you delete that conversation. Delete the topic itself in settings. Some things are never saved at all, such as government ID numbers and financial account numbers.</p>
 </div>
 
@@ -2428,7 +2428,7 @@ ${VERIFIED}
 <p>Memory is shared between chat and <a href="#cowork">Cowork</a> tasks that run in the cloud. Tasks that run only on your computer don't use it, and their memory stays with those tasks.</p>
 
 <div class="callout warn">
-  <div class="c-head">⚠️ Three memories, one word</div>
+  <div class="c-head">Three memories, one word</div>
   <p><b>claude.ai memory</b> — topics saved from your chats, editable in settings. <b>Claude Code auto memory</b> — machine-local notes per repo, in <code>~/.claude/projects/&lt;project&gt;/memory/</code>. <b>The memory tool</b> — an API feature writing to storage you control. Nothing is shared between them.</p>
 </div>
 
@@ -2499,17 +2499,17 @@ sequenceDiagram
 </ul>
 
 <div class="callout warn">
-  <div class="c-head">⚠️ Connector tools run without asking</div>
+  <div class="c-head">Connector tools run without asking</div>
   <p>During Research, connector tools run without per-call approval. Only enable connectors in that chat that you are happy for Claude to use freely.</p>
 </div>
 
 <div class="callout tip">
-  <div class="c-head">💡 Judge it by the citations</div>
+  <div class="c-head">Judge it by the citations</div>
   <p>The author's rule: skim the sources first. If they're thin, the report is confident-sounding and unreliable. A cited report you can audit beats a fluent one you can't.</p>
 </div>
 
 <div class="callout warn">
-  <div class="c-head">⚠️ Research is not cheap</div>
+  <div class="c-head">Research is not cheap</div>
   <p>It counts against the same limits as normal chats, but drains them faster: many sources, long reports. Save it for questions that need a dozen sources, not "what's the syntax for a Flow formula."</p>
 </div>
 
@@ -2557,7 +2557,7 @@ ${VERIFIED}
 <p>The setting is <b>Create and edit files</b> (formerly "Code execution and file creation"), in Settings → Capabilities. Internet access from the sandbox is a separate <b>Allow network egress</b> toggle.</p>
 
 <div class="callout tip">
-  <div class="c-head">💡 This is also how Claude does maths properly</div>
+  <div class="c-head">This is also how Claude does maths properly</div>
   <p>Asked to analyse numbers, Claude can compute them rather than predict them. A median from running code is a different reliability class from one guessed by a language model. If precision matters, ask it to calculate.</p>
 </div>
 
@@ -2584,7 +2584,7 @@ ${VERIFIED}
 </ul>
 
 <div class="callout warn">
-  <div class="c-head">⚠️ Custom connectors run from Anthropic's cloud, not your machine</div>
+  <div class="c-head">Custom connectors run from Anthropic's cloud, not your machine</div>
   <p>The most misunderstood thing here. Add a custom connector by URL and <b>Anthropic's servers</b> connect to it — from every client, including the Desktop app. Your MCP server must be reachable over the public internet from Anthropic's IP ranges. A server on localhost, a private network, or behind your VPN won't connect.</p>
   <p>For a local server, use <a href="#desktop-app">Desktop extensions</a> or <a href="#mcp">Claude Code's MCP</a>. Same protocol, opposite networking model.</p>
 </div>
@@ -2639,7 +2639,7 @@ ${VERIFIED}
 <p>Some plans also get a saved <b>limit reset</b>. Use it to refill your 5-hour or weekly limit when you need it.</p>
 
 <div class="callout warn">
-  <div class="c-head">⚠️ Every surface spends the same budget</div>
+  <div class="c-head">Every surface spends the same budget</div>
   <p>claude.ai, Claude Code, and Claude Desktop count against the same limits. The Thursday wall is usually a long Claude Code session or a long-running task, not your chats.</p>
 </div>
 
@@ -2653,7 +2653,7 @@ ${VERIFIED}
 </ul>
 
 <div class="callout tip">
-  <div class="c-head">💡 How to not hit the wall</div>
+  <div class="c-head">How to not hit the wall</div>
   <p>The author's habits: default to Sonnet 5.5 for everyday work and save Opus 5.5 for work that is actually hard. Use Low or Medium <span class="jargon" data-term="effort">effort</span> for routine tasks; Anthropic says this makes usage last longer. Start a fresh chat — or <code>/clear</code> in Claude Code — between unrelated tasks. Put documents you reuse in a <a href="#projects">project</a>, where cached content counts for less. That is usually the whole fix.</p>
 </div>
 
@@ -2663,7 +2663,7 @@ ${VERIFIED}
 <h2>Monthly API credits (Max)</h2>
 <p>Max includes API credits every month: $100 on 5×, $200 on 20×. Claim them by linking a Claude Console organization in <b>Settings → Billing</b>. They expire at the end of each billing cycle.</p>
 <div class="callout warn">
-  <div class="c-head">⚠️ API credits are not extra Claude Code usage</div>
+  <div class="c-head">API credits are not extra Claude Code usage</div>
   <p>They cover the API, the Console, Managed Agents, the Agent SDK, and <code>claude -p</code> with that org's API key. They do <b>not</b> cover interactive Claude Code or extra usage in Claude. Your plan limits stay the same. Usage credits and API credits are separate things.</p>
 </div>
 
@@ -2766,7 +2766,7 @@ sequenceDiagram
 <p>This is where you catch "it's about to build a new controller when <code>OpportunityListController</code> already does 80% of this." Thirty seconds of reading saves an afternoon of review.</p>
 
 <div class="callout tip">
-  <div class="c-head">💡 The plan is the cheapest place to be wrong</div>
+  <div class="c-head">The plan is the cheapest place to be wrong</div>
   <p>A wrong plan costs one paragraph of correction. A wrong implementation costs a diff review, a rollback, and the context you both burned getting there.</p>
 </div>
 
@@ -2795,7 +2795,7 @@ sequenceDiagram
 <p><b>Stop.</b> Run <code>/rewind</code>, or press Esc twice, and pick <b>Restore code</b>. The files go back, but the conversation stays, so Claude keeps what it learned. Or run <code>/clear</code> and start fresh with a prompt that includes what you just learned. As <a href="#how-claude-thinks">0.3</a> argues, you are fighting a cluttered <span class="jargon" data-term="context-window">context window</span>, not a weak model.</p>
 
 <div class="callout warn">
-  <div class="c-head">⚠️ Rewind only undoes Claude's file edits</div>
+  <div class="c-head">Rewind only undoes Claude's file edits</div>
   <p>A <span class="jargon" data-term="checkpoint">checkpoint</span> tracks files Claude changed with its edit tools. A file that only a shell command changed, such as one written by an <code>sf</code> command, is not restored. Use git for that.</p>
 </div>
 
@@ -2894,12 +2894,12 @@ A table: what references it, where, and how it breaks. Then a verdict:
 safe / needs migration / do not do this.</code></pre>
 
 <div class="callout tip">
-  <div class="c-head">💡 The description is the trigger</div>
+  <div class="c-head">The description is the trigger</div>
   <p>Until the <span class="jargon" data-term="skill">skill</span> loads, its <code>description</code> is all Claude sees of it. Say what it does and when to use it. "Impact analysis stuff" would never fire. Naming the situations ("renaming, deleting, or changing the type") makes it fire exactly when it should. The listing cuts descriptions at 1,536 characters, so put the key use case first. See <a href="#skills-commands">2.6</a>.</p>
 </div>
 
 <div class="callout warn">
-  <div class="c-head">⚠️ The dependency object is still Beta</div>
+  <div class="c-head">The dependency object is still Beta</div>
   <p>Salesforce labels MetadataComponentDependency Beta and "for evaluation purposes only, not for production use." A Tooling API query returns at most 2,000 rows, and it leaves out Reports. Treat its answer as one input, not the whole picture.</p>
 </div>
 
@@ -2924,12 +2924,12 @@ safe / needs migration / do not do this.</code></pre>
 <p>Salesforce documents the plugin in its <a href="https://github.com/forcedotcom/sf-skills/tree/main/plugins/builder/salesforce-development">plugin README</a>. See <a href="#salesforce-setup">6.5</a> for the wider Salesforce setup.</p>
 
 <div class="callout warn">
-  <div class="c-head">⚠️ The Salesforce DX MCP server reaches end of life on 2 Nov 2026</div>
+  <div class="c-head">The Salesforce DX MCP server reaches end of life on 2 Nov 2026</div>
   <p>The local DX MCP server (<code>@salesforce/mcp</code>) gets no releases after that date, and its repo will be archived. A pinned version keeps working, but expect no fixes. Salesforce says its tooling now ships as skills, in <a href="https://github.com/forcedotcom/sf-skills">forcedotcom/sf-skills</a>. Details: <a href="https://github.com/forcedotcom/mcp/issues/46">forcedotcom/mcp#46</a>.</p>
 </div>
 
 <div class="callout warn">
-  <div class="c-head">⚠️ Point it at a sandbox</div>
+  <div class="c-head">Point it at a sandbox</div>
   <p>Any route into the org runs with your credentials. The CLI that runs a SELECT can also deploy or delete. Authenticate against a sandbox (<code>sf org login web --alias my-sandbox</code>). Allow only the reads you need, such as <code>Bash(sf data query *)</code>, and deny the rest, such as <code>Bash(sf project deploy *)</code>. If you connect an MCP server, allow its tools by exact name (<code>mcp__server__tool</code>). See <a href="#mcp">2.9</a>.</p>
 </div>
 
@@ -2939,7 +2939,7 @@ safe / needs migration / do not do this.</code></pre>
 <p><b>The author's take on models:</b> this is diagnostic reasoning across sparse evidence. On the default Opus 5.5, raise effort first (<code>/effort high</code>). For a high-stakes change with murky evidence, try Fable 5.1 (<code>/model fable</code>). Anthropic suggests Fable for root-cause investigations. It can bill to usage credits instead of your plan limits; Claude Code asks first.</p>
 
 <div class="callout warn">
-  <div class="c-head">⚠️ This is a first pass, not a sign-off</div>
+  <div class="c-head">This is a first pass, not a sign-off</div>
   <p>A dependency scan finds what it can see. Dynamic SOQL built from strings, an outside integration that uses the API name, a hardcoded value in an old Flow: a scan can miss all of these. Treat the output as a strong starting list, not a guarantee. The verdict is still yours.</p>
 </div>
 
@@ -3001,7 +3001,7 @@ flowchart LR
 <p>Create an API key in the Claude Console. Store it as the repo secret <code>ANTHROPIC_API_KEY</code>.</p>
 
 <div class="callout warn">
-  <div class="c-head">⚠️ --bare ignores subscription tokens</div>
+  <div class="c-head">--bare ignores subscription tokens</div>
   <p><code>claude setup-token</code> mints a one-year OAuth token for <code>CLAUDE_CODE_OAUTH_TOKEN</code>. It bills your Pro, Max, Team, or Enterprise plan. But bare mode never reads OAuth credentials. With <code>--bare</code>, authenticate with <code>ANTHROPIC_API_KEY</code>. For a secret shared across repos, Anthropic also recommends a Console API key, because an OAuth token is tied to one person's subscription.</p>
 </div>
 
@@ -3074,7 +3074,7 @@ jobs:
 <p>Piping the diff in means Claude needs no shell access to read it. Piped input is capped at 10MB. <code>--max-budget-usd</code> caps the spend per run; pick your own number.</p>
 
 <div class="callout tip">
-  <div class="c-head">💡 --bare is what makes this reproducible</div>
+  <div class="c-head">--bare is what makes this reproducible</div>
   <p>Without it, <code>claude -p</code> loads hooks, skills, plugins, MCP servers, auto memory, and CLAUDE.md, as an interactive session would. Worse, it runs a repo's <code>.claude/settings.json</code> hooks and <code>.mcp.json</code> servers with no trust prompt. On a PR branch, that is the PR author's config. <code>--bare</code> skips all of it; you load only what you pass. Anthropic calls it the recommended mode for scripted calls and plans to make it the default for <code>-p</code>. See <a href="#headless-ci">2.10</a>.</p>
 </div>
 
@@ -3082,12 +3082,12 @@ jobs:
 <p><code>ci/review-rules.md</code> holds the Salesforce-specific bar: SOQL and DML in loops, hardcoded IDs, missing null checks on SOQL results, missing <code>with sharing</code>, tests that assert nothing. Bare mode doesn't load CLAUDE.md, so the prompt names this file. Keep it in the repo so it gets reviewed in PRs like any other code.</p>
 
 <div class="callout warn">
-  <div class="c-head">⚠️ Ask for everything; filter afterwards</div>
+  <div class="c-head">Ask for everything; filter afterwards</div>
   <p>Anthropic's prompting guide warns that a prompt saying "only report high-severity issues" or "be conservative" may be followed literally, and the model reports less. Ask for every finding with a severity, then filter in a separate step. Here that step is <code>jq</code>. Filtering is the pipeline's job, not a judgement call you hand to the model.</p>
 </div>
 
 <div class="callout warn">
-  <div class="c-head">⚠️ A fork PR is code from a stranger</div>
+  <div class="c-head">A fork PR is code from a stranger</div>
   <p>This job feeds untrusted content to an agent holding your key. <code>--allowedTools "Read"</code> and <code>dontAsk</code> are the floor, not paranoia. On public repos, GitHub withholds secrets from fork-triggered runs, so the <code>if:</code> line skips forks instead of failing. <b>The author's advice:</b> don't switch to <code>pull_request_target</code> to get secrets into fork runs. Prefer printing findings over acting on them. Treat the diff as hostile input, because occasionally it is.</p>
 </div>
 
@@ -3144,7 +3144,7 @@ ${VERIFIED}
 <p>If you call the API directly, add the <a href="https://platform.claude.com/docs/en/release-notes/overview">Claude Platform release notes</a>. That is where new API versions and SDK major releases appear.</p>
 
 <div class="callout tip">
-  <div class="c-head">💡 Skip the newsletters</div>
+  <div class="c-head">Skip the newsletters</div>
   <p><b>The author's advice:</b> secondary coverage is where stale patterns come from. A post telling you to tune <code>temperature</code> reads exactly like a current one. The feeds above are primary sources and take about fifteen minutes a month.</p>
 </div>
 
@@ -3194,7 +3194,7 @@ ${VERIFIED}
 </ul>
 
 <div class="callout warn">
-  <div class="c-head">⚠️ If a page's date is old, believe the date</div>
+  <div class="c-head">If a page's date is old, believe the date</div>
   <p>This site is one person's notes with a public URL. The verified badge is not a promise that a page is current. It is a precise statement about when someone last checked. That is the most honest thing an unofficial reference can offer.</p>
 </div>
 
@@ -3244,7 +3244,7 @@ ${VERIFIED}
 </ul>
 
 <div class="callout tip">
-  <div class="c-head">💡 Anthropic's own framing</div>
+  <div class="c-head">Anthropic's own framing</div>
   <p>"Procedures belong in skills." CLAUDE.md holds facts Claude needs all the time. Keep it under 200 lines, give it an owner, and "review changes to it like code."</p>
 </div>
 
@@ -3290,7 +3290,7 @@ flowchart TD
 <p class="diagram-caption">Ask the questions in this order. Most instructions end up somewhere other than CLAUDE.md.</p>
 
 <div class="callout tip">
-  <div class="c-head">💡 Already have an AGENTS.md?</div>
+  <div class="c-head">Already have an AGENTS.md?</div>
   <p>Claude Code reads <code>AGENTS.md</code> as project instructions (v2.1.277 or later). You don't need a separate <code>CLAUDE.md</code> for a repo already set up for other coding agents.</p>
 </div>
 
@@ -3308,7 +3308,7 @@ paths:
 </ol>
 
 <div class="callout tip">
-  <div class="c-head">💡 Never send an LLM to do a linter's job</div>
+  <div class="c-head">Never send an LLM to do a linter's job</div>
   <p>Community practice, and the author's strong view. A linter is deterministic, nearly free, and can't be argued with. An instruction is a suggestion competing for attention. If a linter can catch it, put it there.</p>
 </div>
 
@@ -3342,7 +3342,7 @@ paths:
 </ul>
 
 <div class="callout warn">
-  <div class="c-head">⚠️ Stop shouting in your instruction files</div>
+  <div class="c-head">Stop shouting in your instruction files</div>
   <p>"IMPORTANT", "YOU MUST", and ALL CAPS are now on Anthropic's list of advice to stop following. Current models follow a plainly worded line. Extra emphasis mostly makes Claude over-apply the rule.</p>
   <p>If a line keeps getting missed, either the file is too long or the rule can't have exceptions. Shorten the file, or move the rule to a hook.</p>
 </div>
@@ -3377,7 +3377,7 @@ ${VERIFIED}
 <p>The best-practices page puts it more bluntly. <code>CLAUDE.md</code> is for guidelines, and "Claude is allowed to decide a guideline doesn't apply."</p>
 
 <div class="callout tip">
-  <div class="c-head">💡 The wrapper, from community research</div>
+  <div class="c-head">The wrapper, from community research</div>
   <p>In November 2025, HumanLayer ran a logging proxy between Claude Code and the API. They saw CLAUDE.md wrapped in a <span class="jargon" data-term="system-reminder">system reminder</span> that began: <i>"IMPORTANT: this context may or may not be relevant to your tasks."</i></p>
   <p>This is <b>not official documentation</b>, and the exact wording may have changed since. The official docs confirm the effect, not the text.</p>
 </div>
@@ -3437,12 +3437,12 @@ ${VERIFIED}
 </ul>
 
 <div class="callout warn">
-  <div class="c-head">⚠️ The canary trick doesn't prove what you think</div>
+  <div class="c-head">The canary trick doesn't prove what you think</div>
   <p>A popular tip: put "always call me Mr Tinkleberry" in CLAUDE.md. If Claude uses the name, it read the file. <i>The author's view:</i> this proves loading, not compliance. Claude can greet you correctly while ignoring every rule that matters. Use <code>/context</code> to check loading instead.</p>
 </div>
 
 <div class="callout tip">
-  <div class="c-head">💡 The honest summary</div>
+  <div class="c-head">The honest summary</div>
   <p>CLAUDE.md is a <b>reliable place for facts</b> and an <b>unreliable place for behaviour</b>. Put commands and gotchas in it. Put procedures in skills, scoped constraints in rules, and anything that must not fail in a hook or deny rule. Claude treats the file as context, not configuration.</p>
 </div>
 
@@ -3511,13 +3511,13 @@ ${VERIFIED}
 </table>
 
 <div class="callout tip">
-  <div class="c-head">💡 The two-correction rule</div>
+  <div class="c-head">The two-correction rule</div>
   <p>Straight from Anthropic: if you've corrected the same thing twice and it's still wrong, don't try a third time. The conversation now holds two failed attempts for Claude to keep re-reading. <code>/clear</code>, then write one new prompt that folds in what you learned. Anthropic says this works better almost every time.</p>
   <p>This is the highest-value habit on this page.</p>
 </div>
 
 <div class="callout warn">
-  <div class="c-head">⚠️ Checkpoints don't cover everything</div>
+  <div class="c-head">Checkpoints don't cover everything</div>
   <p><code>/rewind</code> restores files Claude edited with its file tools. A file that <b>only</b> a shell command changed is not restored. If Claude ran <code>rm</code> or <code>mv</code> on it, rewind can't help. Most subagent edits aren't restored either. Git is your durable history. <code>/rewind</code> is in-session undo.</p>
 </div>
 
@@ -3544,7 +3544,7 @@ ${VERIFIED}
 <p>Anthropic's study (published 16 June 2026) covered about 400,000 sessions from about 235,000 people, October 2025 to April 2026. Expert sessions averaged about <b>12 Claude actions per prompt versus 5</b> for novices, and about 3,200 words back versus 600. Verified success was about <b>15% for novices and 28–33%</b> for intermediate users and above. When trouble hit, 19% of novice sessions were abandoned, versus 5–7% for everyone else.</p>
 
 <div class="callout tip">
-  <div class="c-head">💡 The finding that should encourage you</div>
+  <div class="c-head">The finding that should encourage you</div>
   <p><b>Domain expertise predicts success.</b> The more a person knows about the domain, the more often the session succeeds. Years of knowing what breaks in a Salesforce org <i>is</i> the differentiator. Claude supplies throughput. You supply the judgement about what "correct" means.</p>
   <p>Also useful: the novice-to-intermediate gap is <b>bigger</b> than the intermediate-to-expert gap. The habits on this page are where the returns are.</p>
 </div>
@@ -3614,7 +3614,7 @@ ${VERIFIED}
 <p>The most durable insight here: <b>read-heavy work parallelises easily; write-heavy work doesn't.</b> Three agents searching a codebase can't corrupt each other. Three agents editing the same files, each unaware of the others, produce work you must reconcile.</p>
 
 <div class="callout tip">
-  <div class="c-head">💡 Anthropic's own design reflects this</div>
+  <div class="c-head">Anthropic's own design reflects this</div>
   <p>Two of the main built-in subagents, <code>Explore</code> and <code>Plan</code>, are read-only. The agent-teams docs say to start with research and review, and warn that two teammates editing one file leads to overwrites. Workflows that edit many files give each file its own isolated copy.</p>
 </div>
 
@@ -3628,7 +3628,7 @@ ${VERIFIED}
 <p>Worktrees isolate file edits. A worktree is a fresh checkout, so gitignored files like <code>.env</code> are missing. List the ones you need in <code>.worktreeinclude</code> and Claude Code copies them in.</p>
 
 <div class="callout warn">
-  <div class="c-head">⚠️ They don't isolate shared services</div>
+  <div class="c-head">They don't isolate shared services</div>
   <p><i>The author's view, from community failure reports.</i> Ports, databases, migrations, test data, and caches are still shared. If session A runs a migration, session B can break. Worktrees are near-free for <b>stateless</b> work (libraries, pure logic, docs) and painful for <b>stateful</b> app work.</p>
   <p>For Salesforce this matters more than most stacks. Your sandbox is shared state. Two sessions deploying to the same org is not parallelism. It's a race.</p>
 </div>
@@ -3646,7 +3646,7 @@ ${VERIFIED}
 <p>Reviewing code you didn't write is harder than reviewing your own. You first reconstruct what the author meant, then judge whether they did it. Four agents produce four of those.</p>
 
 <div class="callout tip">
-  <div class="c-head">💡 The honest reframe</div>
+  <div class="c-head">The honest reframe</div>
   <p><i>The author's view.</i> Parallelism doesn't make you faster at your job. It <b>changes your job</b>, from author to editor. Some people find that a better use of their expertise. Many find it exhausting. Know which you are before you build a workflow around it.</p>
   <p>It is a <b>multiplier on existing discipline</b>, not a substitute. Every credible success story rests on a real test suite, written architecture, and clean task boundaries.</p>
 </div>
@@ -3655,7 +3655,7 @@ ${VERIFIED}
 <p>Before calling unattended work done, have a reviewer check the diff in fresh context. It sees the change and your criteria, not the reasoning that produced it. <code>/code-review</code> does this. A custom reviewer with only <code>tools: Read, Grep, Glob</code> can't edit anything, and Claude Code enforces that.</p>
 
 <div class="callout warn">
-  <div class="c-head">⚠️ The reviewer trap</div>
+  <div class="c-head">The reviewer trap</div>
   <p>Anthropic's caveat: a reviewer asked to find problems "will always find <i>something</i>." Fix every finding and you get extra abstraction layers and tests for cases that can't happen.</p>
   <p>Tell the reviewer to report only gaps that affect correctness or the spec, and to skip style.</p>
 </div>
@@ -3714,13 +3714,13 @@ ${VERIFIED}
 <p>The plugin's MCP servers use <code>SF_TARGET_ORG</code>, or the project's own <code>target-org</code>. They refuse to start when neither names an org. That is a good default. Respect it rather than working around it.</p>
 
 <div class="callout warn">
-  <div class="c-head">⚠️ The DX MCP Server reaches end of life on 2 November 2026</div>
+  <div class="c-head">The DX MCP Server reaches end of life on 2 November 2026</div>
   <p>The local Salesforce DX MCP Server (<code>@salesforce/mcp</code>, repo <code>salesforcecli/mcp</code>) is no longer maintained after that date. Its repositories will be archived. The npm package stays installable, so pinned setups keep working, but nothing new ships.</p>
   <p>Salesforce's guidance: <b>use skills instead.</b> If you set up the DX MCP Server from an earlier version of this page, move to the plugin.</p>
 </div>
 
 <div class="callout warn">
-  <div class="c-head">⚠️ sf-skills has no stability guarantee</div>
+  <div class="c-head">sf-skills has no stability guarantee</div>
   <p>Salesforce's own warning: "Expect frequent changes." Skills and plugins may be renamed, restructured, or removed between releases. They don't follow GA API stability guarantees. Don't hard-code skill names into your own tooling, and re-check after upgrades.</p>
 </div>
 
@@ -3737,7 +3737,7 @@ ${VERIFIED}
 
 <h2>What nobody has measured</h2>
 <div class="callout tip">
-  <div class="c-head">💡 The most useful thing on this page</div>
+  <div class="c-head">The most useful thing on this page</div>
   <p>As of this page's verified date, the author found <b>no published independent evaluation</b> of three things you care most about:</p>
   <ul>
     <li><b>LWC Jest test quality.</b> Are the tests meaningful?</li>
@@ -3795,7 +3795,7 @@ ${VERIFIED}
 </table>
 
 <div class="callout tip">
-  <div class="c-head">💡 Why this story is worth knowing</div>
+  <div class="c-head">Why this story is worth knowing</div>
   <p>The community was <b>right about the symptom and wrong about the cause</b>. The theories were "they quantized it" and "they nerfed it". All three problems were in the <b>harness</b>, not the model. Anthropic said the API was not affected.</p>
   <p>The lesson: "it feels worse" is real data worth reporting. Your explanation for it is probably wrong.</p>
 </div>
@@ -3831,7 +3831,7 @@ ${VERIFIED}
 </table>
 
 <div class="callout warn">
-  <div class="c-head">⚠️ The exit-1 mistake can actually hurt you</div>
+  <div class="c-head">The exit-1 mistake can actually hurt you</div>
   <p>A hook meant to block dangerous commands, written with <code>exit 1</code>, does not block. The action goes ahead. Unix habit makes <code>exit 1</code> the natural choice, so this is easy to get wrong. A guard that fails open is worse than no guard, because you stopped watching. Use <code>exit 2</code>, and add <code>onFailure: "block"</code> if a crashed hook should also stop the action.</p>
 </div>
 
@@ -3853,7 +3853,7 @@ ${VERIFIED}
 </ul>
 
 <div class="callout warn">
-  <div class="c-head">⚠️ Switching model does not restore a spent limit</div>
+  <div class="c-head">Switching model does not restore a spent limit</div>
   <p>Widely repeated bad advice. The 5-hour and weekly limits are <b>shared across all models</b>. <code>/model sonnet</code> won't buy more room after you hit them. It only helps after a <i>model-specific</i> message such as "You've hit your Opus limit".</p>
 </div>
 

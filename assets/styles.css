@@ -1,25 +1,27 @@
 /* ===========================================================
    Claude Atlas — styles
    Theme-aware (light/dark), responsive, no framework.
-   Layout pattern follows learn-postman; palette is Claude Atlas indigo.
+   Layout pattern follows learn-postman; palette is "Clean docs" blue.
    =========================================================== */
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
 
 :root {
   --bg: #ffffff;
-  --bg-soft: #f6f7f8;
+  --bg-soft: #f6f8fa;
   --bg-elev: #ffffff;
-  --text: #111827;
-  --text-soft: #6b7280;
-  --border: #e5e7eb;
-  --brand: #4f46e5;        /* Atlas indigo */
-  --brand-soft: #eef2ff;
-  --link: #4338ca;
-  --code-bg: #f3f4f6;
-  --code-text: #9d174d;
-  --tip-bg: #eef2ff;    --tip-bd: #a5b4fc;
-  --warn-bg: #fffbeb;   --warn-bd: #b45309;
-  --try-bg: #edfbf3;    --try-bd: #34c77b;
-  --brand-underline: rgba(79, 70, 229, .38);
+  --text: #1f2328;
+  --text-soft: #59636e;
+  --border: #d1d9e0;
+  --brand: #0969da;        /* Clean docs blue */
+  --brand-soft: #ddf4ff;
+  --link: #0969da;
+  --code-bg: #f6f8fa;
+  --code-text: #1f2328;
+  --tip-bg: #f0f7ff;    --tip-bd: #54aeff;
+  --warn-bg: #fff8c5;   --warn-bd: #d4a72c;  --warn-icon: #9a6700;
+  --try-bg: #e9f9ee;    --try-bd: #4ac26b;
+  --brand-underline: rgba(9, 105, 218, .35);
   --shadow: 0 6px 24px rgba(20, 24, 33, .10);
   --shadow-tip: 0 12px 34px rgba(20, 24, 33, .20);
   --radius: 12px;
@@ -28,21 +30,21 @@
 }
 
 :root[data-theme="dark"] {
-  --bg: #0b0e14;
-  --bg-soft: #11151d;
-  --bg-elev: #161b26;
-  --text: #e5e7eb;
-  --text-soft: #9ca3af;
-  --border: #1f2937;
-  --brand: #818cf8;
-  --brand-soft: #1e1b4b;
-  --link: #a5b4fc;
-  --code-bg: #161b26;
-  --code-text: #f9a8d4;
-  --tip-bg: #171a3a;    --tip-bd: #4338ca;
-  --warn-bg: #2a2205;   --warn-bd: #fbbf24;
-  --try-bg: #10241a;    --try-bd: #2b7a52;
-  --brand-underline: rgba(129, 140, 248, .45);
+  --bg: #0d1117;
+  --bg-soft: #151b23;
+  --bg-elev: #151b23;
+  --text: #e6edf3;
+  --text-soft: #9198a1;
+  --border: #30363d;
+  --brand: #4493f8;
+  --brand-soft: #121d2f;
+  --link: #4493f8;
+  --code-bg: #151b23;
+  --code-text: #e6edf3;
+  --tip-bg: #0f1d33;    --tip-bd: #1f6feb;
+  --warn-bg: #272115;   --warn-bd: #9e6a03;  --warn-icon: #d29922;
+  --try-bg: #0f2418;    --try-bd: #238636;
+  --brand-underline: rgba(68, 147, 248, .45);
   --shadow: 0 6px 24px rgba(0, 0, 0, .45);
   --shadow-tip: 0 14px 38px rgba(0, 0, 0, .55);
 }
@@ -54,14 +56,16 @@ html, body {
   padding: 0;
   background: var(--bg);
   color: var(--text);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  font-size: 15px;
-  line-height: 1.58;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.7;
   -webkit-font-smoothing: antialiased;
 }
 
 a { color: var(--link); text-decoration: none; }
 a:hover { text-decoration: underline; }
+.article p a, .article li a, .article td a, .sources a { text-decoration: underline; text-underline-offset: 2px; }
+.home-card li a { text-decoration: none; }
 
 /* ---------- Top bar ---------- */
 .topbar {
@@ -108,7 +112,7 @@ a:hover { text-decoration: underline; }
   outline: none;
 }
 .search-wrap input:focus { border-color: var(--brand); }
-.search-wrap .ico { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); color: var(--text-soft); }
+.search-wrap .ico { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); color: var(--text-soft); width: 16px; height: 16px; }
 
 .icon-btn {
   border: 1px solid var(--border);
@@ -173,11 +177,11 @@ a:hover { text-decoration: underline; }
 }
 .sidebar .group-title:hover { color: var(--text); }
 .sidebar .group-title .chev {
-  font-size: 9px;
+  height: 12px;
   transition: transform .2s ease;
   transform: rotate(90deg); /* expanded points down */
   flex: 0 0 auto;
-  width: 10px;
+  width: 12px;
 }
 .sidebar .group.collapsed .group-title .chev { transform: rotate(0deg); }
 .sidebar .group-links {
@@ -249,7 +253,7 @@ a:hover { text-decoration: underline; }
 .article ul, .article ol { margin: 11px 0; padding-left: 22px; }
 .article li { margin: 4px 0; }
 .article img { max-width: 100%; border-radius: 8px; }
-.lead { font-size: 16.5px; color: var(--text-soft); }
+.lead { font-size: 18px; color: var(--text-soft); }
 
 /* ---------- Home / overview page ---------- */
 .home-hero { padding: 6px 0 20px; border-bottom: 1px solid var(--border); margin-bottom: 22px; }
@@ -443,7 +447,7 @@ table.doc th { background: var(--bg-soft); font-weight: 700; }
   display: flex; align-items: center; gap: 10px;
   padding: 16px 18px; border-bottom: 1px solid var(--border);
 }
-.modal .m-head h3 { margin: 0; font-size: 18px; }
+.modal .m-head h3 { margin: 0; font-size: 18px; display: flex; align-items: center; gap: 8px; }
 .modal .m-body { padding: 6px 18px 20px; }
 .gloss-item { padding: 12px 0; border-bottom: 1px solid var(--border); scroll-margin-top: 70px; }
 .gloss-item:last-child { border-bottom: none; }
@@ -529,6 +533,7 @@ table.doc th { background: var(--bg-soft); font-weight: 700; }
   .mobile-scrim.show { display:block; position:fixed; inset:var(--topbar-h) 0 0 0; background:rgba(0,0,0,.35); z-index:45; }
   .search-wrap { width: 100%; }
   .content { padding: 22px 18px 70px; }
+  .topbar .brand small { display: none; }
 }
 
 /* ---------- Claude Atlas additions ---------- */
@@ -581,3 +586,19 @@ table.doc th { background: var(--bg-soft); font-weight: 700; }
   line-height: 1.55;
 }
 .site-footer p { margin: 0; }
+
+/* Lucide icons (lucide.dev, ISC licence, v0.460.0) drawn as masks so they take the text colour */
+.icon { display: inline-block; width: 18px; height: 18px; flex: none; background: currentColor; -webkit-mask: var(--i) center / contain no-repeat; mask: var(--i) center / contain no-repeat; }
+.i-menu { --i: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' %3E%3Cline x1='4' x2='20' y1='12' y2='12' /%3E%3Cline x1='4' x2='20' y1='6' y2='6' /%3E%3Cline x1='4' x2='20' y1='18' y2='18' /%3E%3C/svg%3E"); }
+.i-search { --i: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' %3E%3Ccircle cx='11' cy='11' r='8' /%3E%3Cpath d='m21 21-4.3-4.3' /%3E%3C/svg%3E"); }
+.i-book-open { --i: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' %3E%3Cpath d='M12 7v14' /%3E%3Cpath d='M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z' /%3E%3C/svg%3E"); }
+.i-moon { --i: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' %3E%3Cpath d='M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z' /%3E%3C/svg%3E"); }
+.i-sun { --i: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' %3E%3Ccircle cx='12' cy='12' r='4' /%3E%3Cpath d='M12 2v2' /%3E%3Cpath d='M12 20v2' /%3E%3Cpath d='m4.93 4.93 1.41 1.41' /%3E%3Cpath d='m17.66 17.66 1.41 1.41' /%3E%3Cpath d='M2 12h2' /%3E%3Cpath d='M20 12h2' /%3E%3Cpath d='m6.34 17.66-1.41 1.41' /%3E%3Cpath d='m19.07 4.93-1.41 1.41' /%3E%3C/svg%3E"); }
+.i-house { --i: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' %3E%3Cpath d='M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8' /%3E%3Cpath d='M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z' /%3E%3C/svg%3E"); }
+.i-x { --i: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' %3E%3Cpath d='M18 6 6 18' /%3E%3Cpath d='m6 6 12 12' /%3E%3C/svg%3E"); }
+.i-chevron-right { --i: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' %3E%3Cpath d='m9 18 6-6-6-6' /%3E%3C/svg%3E"); }
+.i-lightbulb { --i: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' %3E%3Cpath d='M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5' /%3E%3Cpath d='M9 18h6' /%3E%3Cpath d='M10 22h4' /%3E%3C/svg%3E"); }
+.i-circle-alert { --i: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' %3E%3Ccircle cx='12' cy='12' r='10' /%3E%3Cline x1='12' x2='12' y1='8' y2='12' /%3E%3Cline x1='12' x2='12.01' y1='16' y2='16' /%3E%3C/svg%3E"); }
+.callout .c-head::before { content: ""; width: 18px; height: 18px; flex: none; -webkit-mask: var(--i) center / contain no-repeat; mask: var(--i) center / contain no-repeat; }
+.callout.tip .c-head::before { --i: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' %3E%3Cpath d='M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5' /%3E%3Cpath d='M9 18h6' /%3E%3Cpath d='M10 22h4' /%3E%3C/svg%3E"); background: var(--brand); }
+.callout.warn .c-head::before { --i: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' %3E%3Ccircle cx='12' cy='12' r='10' /%3E%3Cline x1='12' x2='12' y1='8' y2='12' /%3E%3Cline x1='12' x2='12.01' y1='16' y2='16' /%3E%3C/svg%3E"); background: var(--warn-icon); }

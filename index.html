@@ -16,8 +16,8 @@
   <meta name="twitter:title" content="Claude Atlas — the Claude ecosystem, mapped">
   <meta name="twitter:description" content="An unofficial field guide for engineers who want to stay current without reading every changelog.">
 
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%234f46e5'/><path d='M28 72 L50 26 L72 72' fill='none' stroke='white' stroke-width='8' stroke-linecap='round' stroke-linejoin='round'/><path d='M38 57 H62' stroke='white' stroke-width='8' stroke-linecap='round'/></svg>">
-  <link rel="stylesheet" href="assets/styles.css?v=3">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230969da'/><path d='M28 72 L50 26 L72 72' fill='none' stroke='white' stroke-width='8' stroke-linecap='round' stroke-linejoin='round'/><path d='M38 57 H62' stroke='white' stroke-width='8' stroke-linecap='round'/></svg>">
+  <link rel="stylesheet" href="assets/styles.css?v=5">
   <!-- Set theme before paint to avoid a flash -->
   <script>
     (function () {
@@ -32,18 +32,18 @@
 <body>
 
   <header class="topbar">
-    <button id="menuBtn" class="icon-btn" aria-label="Show or hide contents" title="Show / hide contents">☰</button>
+    <button id="menuBtn" class="icon-btn" aria-label="Show or hide contents" title="Show / hide contents"><span class="icon i-menu" aria-hidden="true"></span></button>
     <a class="brand" href="#home" title="Home">
       <span class="logo">A</span>
       <span>Claude Atlas<small>the ecosystem, mapped — unofficial</small></span>
     </a>
     <div class="spacer"></div>
     <div class="search-wrap">
-      <span class="ico">🔎</span>
+      <span class="ico icon i-search" aria-hidden="true"></span>
       <input id="search" type="search" placeholder="Search topics…" aria-label="Search topics">
     </div>
-    <button id="glossaryBtn" class="icon-btn" title="Open the Jargon Decoder" aria-label="Glossary">📖</button>
-    <button id="themeBtn" class="icon-btn" title="Toggle light / dark" aria-label="Toggle theme">🌙</button>
+    <button id="glossaryBtn" class="icon-btn" title="Open the Jargon Decoder" aria-label="Glossary"><span class="icon i-book-open" aria-hidden="true"></span></button>
+    <button id="themeBtn" class="icon-btn" title="Toggle light / dark" aria-label="Toggle theme"><span class="icon i-moon" aria-hidden="true"></span></button>
     <span id="progressBar"></span>
   </header>
 
@@ -68,9 +68,9 @@
   <div id="glossaryModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-label="Jargon Decoder">
     <div class="modal">
       <div class="m-head">
-        <h3>📖 Jargon Decoder</h3>
+        <h3><span class="icon i-book-open" aria-hidden="true"></span> Jargon Decoder</h3>
         <div class="spacer" style="flex:1"></div>
-        <button id="modalClose" class="icon-btn" aria-label="Close">✕</button>
+        <button id="modalClose" class="icon-btn" aria-label="Close"><span class="icon i-x" aria-hidden="true"></span></button>
       </div>
       <div class="m-body">
         <input id="modalSearch" placeholder="Filter terms…"
@@ -85,8 +85,8 @@
 
   <!-- Mermaid (diagrams) via CDN -->
   <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
-  <script src="assets/glossary.js?v=3"></script>
-  <script src="assets/content.js?v=3"></script>
-  <script src="assets/app.js?v=3"></script>
+  <script src="assets/glossary.js?v=5"></script>
+  <script src="assets/content.js?v=5"></script>
+  <script src="assets/app.js?v=5"></script>
 </body>
 </html>

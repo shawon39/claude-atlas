@@ -27,7 +27,7 @@
   function applyTheme(t) {
     document.documentElement.setAttribute("data-theme", t);
     try { localStorage.setItem("atlas_theme", t); } catch (e) {}
-    $("#themeBtn").textContent = t === "dark" ? "☀️" : "🌙";
+    $("#themeBtn").innerHTML = `<span class="icon i-${t === "dark" ? "sun" : "moon"}" aria-hidden="true"></span>`;
     initMermaid();
     // re-render current diagrams with new theme
     const cur = currentId();
@@ -43,7 +43,7 @@
     window.mermaid.initialize({
       startOnLoad: false,
       securityLevel: "loose",
-      theme: currentTheme() === "dark" ? "dark" : "default",
+      theme: currentTheme() === "dark" ? "dark" : "neutral",
       flowchart: { htmlLabels: true, curve: "basis" }
     });
   }
@@ -62,11 +62,11 @@
   const attrEsc = s => s.replace(/"/g, "&quot;");
   function buildSidebar() {
     let html = `<a class="nav-link home-link" data-id="home" href="#home" draggable="false">
-      <span class="num">🏠</span><span class="lbl">Home / Overview</span></a>`;
+      <span class="num"><span class="icon i-house" aria-hidden="true"></span></span><span class="lbl">Home / Overview</span></a>`;
     CONTENT.forEach(part => {
       html += `<div class="group" data-part="${attrEsc(part.part)}">
         <button class="group-title" aria-expanded="true">
-          <span class="chev">▸</span><span class="gt-label">${part.part}</span>
+          <span class="chev icon i-chevron-right" aria-hidden="true"></span><span class="gt-label">${part.part}</span>
         </button>
         <div class="group-links">`;
       part.pages.forEach(pg => {
@@ -390,6 +390,7 @@
     }
   } catch (e) {}
   buildSidebar();
+  if (currentTheme() === "dark") $("#themeBtn").innerHTML = `<span class="icon i-sun" aria-hidden="true"></span>`;
   initMermaid();
   route();
 })();

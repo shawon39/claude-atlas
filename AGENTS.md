@@ -6,7 +6,7 @@ serves it.
 
 Live at `https://shawon39.github.io/claude-atlas`.
 
-Layout pattern follows `shawon39/learn-postman`; the palette is Atlas indigo.
+Layout pattern follows `shawon39/learn-postman`; the palette is "Clean docs" blue.
 
 ## Working on it
 
@@ -58,7 +58,7 @@ These are not style preferences. They are what keeps the site true and maintaina
    comes from community practice rather than official guidance, say so.
 6. **Date every page.** Start the `html` with `${VERIFIED}`. Bump the `VERIFIED` constant — or make it
    per-page — when you re-check facts. This is the site's main defence against going stale.
-7. **Flag deprecations loudly.** `<div class="callout warn">` with a `<div class="c-head">⚠️ …</div>`.
+7. **Flag deprecations loudly.** `<div class="callout warn">` with a `<div class="c-head">…</div>` (the icon is added by CSS).
 8. **Mermaid for flows and architecture only.** `<div class="mermaid">…</div>`, one or two per page.
    Never for lists or hierarchies a table handles better. Add a `<p class="diagram-caption">`.
 9. **Don't transcribe official reference tables.** Link them; explain the 20% people actually use.
@@ -70,7 +70,7 @@ These are not style preferences. They are what keeps the site true and maintaina
 | Element | Use |
 | --- | --- |
 | `<p class="lead">` | Opening paragraph |
-| `<div class="callout tip">` + `<div class="c-head">💡 …</div>` | Insight worth boxing |
+| `<div class="callout tip">` + `<div class="c-head">…</div>` | Insight worth boxing |
 | `<div class="callout warn">` | Deprecations, traps |
 | `<div class="callout try">` | Do-this-now |
 | `<table class="doc">` | All tables |
