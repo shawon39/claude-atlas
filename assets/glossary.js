@@ -2,21 +2,21 @@
    Jargon Decoder — every term is keyed by a lowercase slug.
    In content, wrap a word like:  <span class="jargon" data-term="agent">agent</span>
    The slug (data-term) must match a key below.
-   Verified against official docs 2026-07-15.
+   Verified against official docs 2026-10-28.
    =========================================================== */
 
 const GLOSSARY = {
   "context-window": {
     term: "Context window",
-    def: "The whiteboard. Everything Claude can see right now — your prompt, the conversation so far, files it has read, tool results. Current models hold 1M tokens (Haiku 4.5 holds 200K). It is finite, and when it fills, something must be dropped or summarised."
+    def: "The whiteboard. Everything Claude can see right now — your prompt, the conversation so far, files it has read, tool results. Every current model holds 1M tokens; older ones such as Haiku 4.5 hold 200K. It is finite, and when it fills, something must be dropped or summarised."
   },
   "context-rot": {
     term: "Context rot",
-    def: "Information in the middle of a very long context gets less attention than information at the start or end. A full context window is not the same as a useful one — which is why more context is not automatically better."
+    def: "As the context grows, Claude's accuracy and recall drop. A full context window is not the same as a useful one — which is why more context is not automatically better."
   },
   "token": {
     term: "Token",
-    def: "The unit the context window is measured in — roughly 3.5 characters of English, so ~750 words per 1,000 tokens. Both what you send and what Claude writes cost tokens, and output costs about 5× input."
+    def: "The unit the context window is measured in — Claude 4.7 and later models produce about 30% more tokens for the same text than older ones, so 1,000 tokens is roughly 550 words of English. Both what you send and what Claude writes cost tokens, and output costs about 5× input."
   },
   "tool-use": {
     term: "Tool use",
@@ -60,11 +60,11 @@ const GLOSSARY = {
   },
   "thinking": {
     term: "Thinking (adaptive)",
-    def: "Working out the answer on scrap paper before speaking. On current models this is adaptive — Claude decides when and how much to think rather than you setting a budget. Thinking tokens are billed as output."
+    def: "Working out the answer on scrap paper before speaking. On current models this is adaptive — Claude decides when and how much to think rather than you setting a budget. It is on by default, and on Opus 5.5 and Fable 5.1 it cannot be turned off. Thinking tokens are billed as output."
   },
   "effort": {
     term: "Effort",
-    def: "How hard to work. A dial — low, medium, high, xhigh, max — controlling thinking depth and token spend. Default is high; xhigh is recommended for coding and agentic work. Try tuning effort before switching to a bigger model."
+    def: "How hard to work. A dial — low, medium, high, xhigh, max — controlling thinking depth and token spend. Opus 5.5 and Haiku 5.5 default to medium, as does Sonnet 5.5 in Claude Code and the apps; most others default to high. xhigh is meant for long agentic runs. Try tuning effort before switching to a bigger model."
   },
   "compaction": {
     term: "Compaction",
@@ -72,11 +72,11 @@ const GLOSSARY = {
   },
   "memory": {
     term: "Memory",
-    def: "What survives the whiteboard being wiped. An ambiguous term: claude.ai memory (summaries of your chats), Claude Code auto memory (machine-local notes per project), and the memory tool (an API feature writing to a directory you control)."
+    def: "What survives the whiteboard being wiped. An ambiguous term: claude.ai memory (editable topics Claude saves as you chat), Claude Code auto memory (machine-local notes per project), and the memory tool (an API feature writing to a directory you control)."
   },
   "artifact": {
     term: "Artifact",
-    def: "The document beside the conversation. Standalone content — a chart, an app, a doc — rendered in its own pane rather than inline. Artifacts can be interactive, published to a link, and edited in place."
+    def: "The document beside the conversation. Standalone content — a doc, deck, design, dashboard, or small app — rendered in its own pane rather than inline. Everything saves to the Artifacts tab, on every plan including Free. Artifacts can be interactive, shared by link, and edited in place."
   },
   "project": {
     term: "Project",
@@ -84,7 +84,7 @@ const GLOSSARY = {
   },
   "permission-mode": {
     term: "Permission mode",
-    def: "How much rope Claude gets in Claude Code: read-only by default, through auto-accepting edits, up to a classifier-screened auto mode. Modes are cycled with Shift+Tab."
+    def: "How much rope Claude gets in Claude Code. There are six, from Manual (asks before edits and commands) through accept-edits and plan to auto (a classifier checks each action) and bypass (containers only). Shift+Tab cycles them in the CLI."
   },
   "plan-mode": {
     term: "Plan mode",
@@ -100,11 +100,11 @@ const GLOSSARY = {
   },
   "cowork": {
     term: "Cowork",
-    def: "Anthropic's delegated-work surface. You describe an outcome, Claude plans it, splits it into subtasks, runs them (often in parallel) and returns finished documents. Over 90% of Cowork usage is not software development."
+    def: "Handing Claude a whole task instead of a question. You describe an outcome; Claude plans it, splits it into subtasks, runs them (often in parallel), and returns finished files. Since 16 September 2026 it is no longer a separate mode: chat and Cowork are one conversation, and Claude decides when a request needs the longer treatment."
   },
   "prompt-caching": {
     term: "Prompt caching",
-    def: "Reusing an already-processed prefix of a prompt so you don't pay full price to re-send it. Cache reads cost ~0.1× base input price. Any byte change in the prefix invalidates everything after it."
+    def: "Reusing an already-processed prefix of a prompt so you don't pay full price to re-send it. Cache reads cost 0.1× the base input price on most models, 0.05× on Opus 5.5 and Sonnet 5.5, and 0.025× on Fable 5.1. Any byte change in the prefix invalidates everything after it."
   },
   "worktree": {
     term: "Git worktree",
@@ -132,23 +132,23 @@ const GLOSSARY = {
   },
   "computer-use": {
     term: "Computer use",
-    def: "Claude driving your actual screen — taking screenshots, clicking, typing, opening apps. A research preview in Cowork, Pro and Max only. It is the last resort: Claude tries connectors first, then the browser, then your screen."
+    def: "Claude driving your actual screen — taking screenshots, clicking, typing, opening apps. In beta on Pro and Max only, off by default, and it needs Claude Desktop running. It is the last resort: Claude tries a connector, a shell command, or the browser first, and uses your screen only when none fits."
   },
   "plugin": {
     term: "Plugin",
-    def: "A Cowork bundle: skills, connectors, and subagents packaged together, sometimes with slash commands and hooks. Installed from the Customize menu. Hooks and subagents only run in Cowork, so they grey out in chat."
+    def: "A starter kit installed as one unit: skills, subagents, hooks, and MCP servers or connectors packaged together. The same format works in Claude Code and in the Claude app, though each app loads a different set of parts. What a plugin runs, it runs as you."
   },
   "sandbox": {
     term: "Sandbox",
-    def: "The isolated, temporary environment on Anthropic's servers where Cowork runs code and shell commands. Egress goes through a mandatory proxy, private and cloud-metadata addresses are unreachable, and your connector tokens never enter it."
+    def: "A walled-off space where Claude runs code, so a mistake can't reach the rest of your system. Long tasks in the Claude app and Claude Code cloud sessions run in one on Anthropic's servers. On your own machine, Claude Code can sandbox its shell commands on macOS, Linux, and WSL 2."
   },
   "usage-credits": {
     term: "Usage credits",
-    def: "Extra capacity you can buy on a paid plan when you exhaust your allowance. Also how Fable 5 is reached beyond what your plan includes."
+    def: "Extra capacity you can buy on Pro, Max, Team, and seat-based Enterprise. With credits on, hitting a 5-hour or weekly limit no longer stops your work; it continues on credits."
   },
   "system-reminder": {
     term: "System reminder",
-    def: "The wrapper Claude Code puts around your CLAUDE.md before showing it to the model. It tells Claude the content may or may not be relevant and not to respond to it unless it is. This is why CLAUDE.md is advisory rather than enforced — and why hooks exist."
+    def: "Per community research, not official docs: the wrapper Claude Code puts around your CLAUDE.md before showing it to the model. It tells Claude the content may or may not be relevant and not to respond to it unless it is. This is why CLAUDE.md is advisory rather than enforced — and why hooks exist."
   },
   "agentic-engineering": {
     term: "Agentic engineering",
@@ -157,5 +157,33 @@ const GLOSSARY = {
   "opusplan": {
     term: "opusplan",
     def: "A model setting where Opus does the planning and Sonnet does the implementing. Buys Opus-quality decisions at closer to Sonnet cost, because planning is the part that needs the judgement."
+  },
+  "cloud-session": {
+    term: "Cloud session",
+    def: "A Claude Code session that runs on Anthropic's machines, not yours. Start one from claude.ai/code, the Claude app, the desktop app, or with claude --cloud. It keeps working after you close your laptop. Use it for long tasks, or when the repo isn't on your machine."
+  },
+  "agents-md": {
+    term: "AGENTS.md",
+    def: "An instruction file that several coding agents read, not only Claude. If your project has no CLAUDE.md, Claude Code reads AGENTS.md in its place."
+  },
+  "dynamic-workflow": {
+    term: "Dynamic workflow",
+    def: "A short script Claude writes that runs many subagents at once — dozens to hundreds — in the background. The script holds the plan and the partial results, so Claude's conversation keeps only the final answer. Use it for a codebase-wide audit or a large migration."
+  },
+  "agent-team": {
+    term: "Agent team",
+    def: "Several Claude Code sessions working together. A lead session hands out tasks from a shared list, and teammates message each other directly. Experimental, off by default, and it uses far more tokens than one session."
+  },
+  "mod": {
+    term: "Mod",
+    def: "A Claude Code plugin made of JavaScript or TypeScript that runs inside Claude Code. It can add panes, change how tool calls behave, or add instant commands. It is not sandboxed, so install only mods you trust."
+  },
+  "prompt-injection": {
+    term: "Prompt injection",
+    def: "Hidden instructions planted in something Claude reads — a web page, a file, a tool result. The goal is to make Claude do something you did not ask for."
+  },
+  "rag": {
+    term: "RAG (retrieval-augmented generation)",
+    def: "Searching instead of reading everything. Claude looks through your files and pulls in only the parts that match your question. This lets a project hold far more material than fits in one context window."
   }
 };
